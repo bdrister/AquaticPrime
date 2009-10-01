@@ -4,5 +4,8 @@ The AquaticPrime framework is a secure registration method for your shareware ap
 How is this possible?
 AquaticPrime uses RSA encryption to provide fairly good security - the same that is used to protect government documents. It is computationally infeasible for an attacker to generate fake serial numbers, despite the entire framework being open-source. 
 
-Why did you write this?
-I wrote this framework because I dislike several aspects of the registration methods provided by commercial companies. It seems to me that they provide proprietary, insecure algorithms and then tack on obnoxious activation schemes if you want any real security.
+Where did it come from?
+AquaticPrime was written primarily by Lucas Newman, circa 2005, and has enjoyed acceptance among the indie Mac developer community. Many developers have made their own tweaks and extensions to it since then, but for the most part they've stayed with the authors. I've (Benjamin Rister) created this new repository and volunteered to act as maintainer in an effort to reintegrate these changes so that everybody can benefit from them.
+
+How do I use this?
+Check out the wiki at http://wiki.github.com/bdrister/AquaticPrime.
