@@ -1,0 +1,8 @@
+What is it?
+The AquaticPrime framework is a secure registration method for your shareware applications, released as free open-source software. 
+
+How is this possible?
+AquaticPrime uses RSA encryption to provide fairly good security - the same that is used to protect government documents. It is computationally infeasible for an attacker to generate fake serial numbers, despite the entire framework being open-source. 
+
+Why did you write this?
+I wrote this framework because I dislike several aspects of the registration methods provided by commercial companies. It seems to me that they provide proprietary, insecure algorithms and then tack on obnoxious activation schemes if you want any real security.

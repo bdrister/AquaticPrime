@@ -1,0 +1,9 @@
+{
+    IBClasses = (
+        {CLASS = AQAboutView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {CLASS = AQAboutWindow; LANGUAGE = ObjC; SUPERCLASS = NSWindow; }, 
+        {CLASS = AboutController; LANGUAGE = ObjC; SUPERCLASS = NSWindowController; }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}
