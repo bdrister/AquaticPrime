@@ -90,6 +90,7 @@ int main (int argc, const char * argv[]) {
 	}
 	
 	CFRelease(exampleLicenseFileData);
+	CFRelease(exampleKey);
 
     return 0;
 }
