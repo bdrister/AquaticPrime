@@ -1,8 +1,8 @@
 //
 // AquaticPrime.h
-// AquaticPrime Carbon Implementation
+// AquaticPrime Core Foundation Implementation
 //
-// Copyright (c) 2005, Lucas Newman
+// Copyright (c) 2005-2009 Lucas Newman and other contributors
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
