@@ -1,6 +1,6 @@
 //
 // AquaticPrime.c
-// AquaticPrime Carbon Implementation
+// AquaticPrime Core Foundation Implementation
 //
 // Copyright (c) 2005, Lucas Newman
 // All rights reserved.
@@ -27,8 +27,8 @@
 #include "AquaticPrime.h"
 
 static RSA *rsaKey;
-static CFStringRef hash;
-static CFMutableArrayRef blacklist;
+static __strong CFStringRef hash;
+static __strong CFMutableArrayRef blacklist;
 
 Boolean APSetKey(CFStringRef key)
 {
@@ -115,14 +115,16 @@ CFDictionaryRef APCreateDictionaryForLicenseData(CFDataRef data)
         return NULL;
     }
     
-    unsigned char sigBytes[128];
     CFDataRef sigData = CFDictionaryGetValue(licenseDictionary, CFSTR("Signature"));
-    CFDataGetBytes(sigData, CFRangeMake(0, CFDataGetLength(sigData)), sigBytes);
+	CFIndex sigDataLength = CFDataGetLength(sigData);
+	UInt8 sigBytes[sigDataLength];
+    CFDataGetBytes(sigData, CFRangeMake(0, sigDataLength), sigBytes);
     CFDictionaryRemoveValue(licenseDictionary, CFSTR("Signature"));
     
     // Decrypt the signature
-    unsigned char checkDigest[128] = {0};
-    if (RSA_public_decrypt(CFDataGetLength(sigData), sigBytes, checkDigest, rsaKey, RSA_PKCS1_PADDING) != SHA_DIGEST_LENGTH) {
+	int checkDigestMaxSize = RSA_size(rsaKey)-11;
+    unsigned char checkDigest[checkDigestMaxSize];
+    if (RSA_public_decrypt(sigDataLength, sigBytes, checkDigest, rsaKey, RSA_PKCS1_PADDING) != SHA_DIGEST_LENGTH) {
         CFRelease(licenseDictionary);
         return NULL;
     }
@@ -131,7 +133,7 @@ CFDictionaryRef APCreateDictionaryForLicenseData(CFDataRef data)
     CFMutableStringRef hashCheck = CFStringCreateMutable(kCFAllocatorDefault,0);
     int hashIndex;
     for (hashIndex = 0; hashIndex < SHA_DIGEST_LENGTH; hashIndex++)
-        CFStringAppendFormat(hashCheck, NULL, CFSTR("%02x"), checkDigest[hashIndex]);
+        CFStringAppendFormat(hashCheck, nil, CFSTR("%02x"), checkDigest[hashIndex]);
     APSetHash(hashCheck);
     CFRelease(hashCheck);
     
