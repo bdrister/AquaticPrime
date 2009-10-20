@@ -131,7 +131,7 @@
 				25C22E75108E664700D1D72F /* AquaticPrime.m */,
 			);
 			name = Cocoa;
-			path = ../User/Cocoa;
+			path = ../Source/Cocoa;
 			sourceTree = SOURCE_ROOT;
 		};
 		29B97314FDCFA39411CA2CEA /* AquaticPrimeDeveloper */ = {
