@@ -1,0 +1,7 @@
+IMPORTANT NOTE
+
+The general consensus is that using the Objective-C/Cocoa implementation of AquaticPrime is fairly insecure, due to the ease of class/method/etc. replacement in the Objective-C runtime.  This may make it simple to not only produce a crack for your app, but worse, to produce a generic crack that automatically works on any app that uses these classes as-is.
+
+Most normal Mac applications are advised to use the CoreFoundation implementation instead.
+
+If you do choose to use this Objective-C implementation, at the very least you should consider renaming the class, and possibly the methods as well, to reduce the chances that an automated crack will work.  As with all of these implementations, it's a good idea to attempt to verify an invalid license as well to ensure the method hasn't been swapped out with { return YES; }.
