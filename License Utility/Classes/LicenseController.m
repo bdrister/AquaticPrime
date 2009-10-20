@@ -301,7 +301,7 @@
 		[valueArray retain];
 	
 	[keyValueTable reloadData];
-	[keyValueTable selectRow:row-1 byExtendingSelection:NO];
+	[keyValueTable selectRowIndexes:[NSIndexSet indexSetWithIndex:row-1] byExtendingSelection:NO];
 	
 	if (![keyArray count])
 		[generateLicenseButton setEnabled:NO];

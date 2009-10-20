@@ -148,7 +148,8 @@
 	[productArray sortUsingSelector:@selector(caseInsensitiveCompare:)];
 	[productTable reloadData];
 	// Select the copy
-	[productTable selectRow:[productArray indexOfObject:[oldProduct stringByAppendingString:copy]] byExtendingSelection:NO];
+	[productTable selectRowIndexes:[NSIndexSet indexSetWithIndex:[productArray indexOfObject:[oldProduct stringByAppendingString:copy]]]
+			  byExtendingSelection:NO];
 }
 
 - (IBAction)sheetOK:(id)sender
@@ -163,7 +164,7 @@
 	
 	[keyController generateKeyForProduct:productName];
 	if ([productArray count]) {
-		[productTable selectRow:[productArray indexOfObject:productName] byExtendingSelection:NO];
+		[productTable selectRowIndexes:[NSIndexSet indexSetWithIndex:[productArray indexOfObject:productName]] byExtendingSelection:NO];
 		[removeButton setEnabled:YES];
 	}
 }
@@ -233,7 +234,7 @@
 	[productArray removeObjectAtIndex:index];
 		
 	[productTable reloadData];
-	[productTable selectRow:index-1 byExtendingSelection:NO];
+	[productTable selectRowIndexes:[NSIndexSet indexSetWithIndex:index-1] byExtendingSelection:NO];
 	//[[NSNotificationCenter defaultCenter] postNotificationName:@"ProductSelected" object:productTable];
 }
 

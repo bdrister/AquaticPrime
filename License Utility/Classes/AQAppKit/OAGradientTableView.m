@@ -99,25 +99,14 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
     static const float domainAndRange[8] = {0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0};
     CGFunctionRef linearBlendFunctionRef = CGFunctionCreate(twoColors, 1, domainAndRange, 4, domainAndRange, &linearFunctionCallbacks);
     
-#ifdef DO_IT_PANTHER
     NSIndexSet *selectedRowIndexes = [self selectedRowIndexes];
     unsigned int rowIndex = [selectedRowIndexes indexGreaterThanOrEqualToIndex:0];
-#else
-    NSEnumerator *selectedRowEnumerator = [self selectedRowEnumerator];
-    NSNumber *rowIndexNumber = [selectedRowEnumerator nextObject];
-    unsigned int rowIndex = rowIndexNumber ? [rowIndexNumber unsignedIntValue] : NSNotFound;
-#endif
 
     while (rowIndex != NSNotFound) {
         unsigned int endOfCurrentRunRowIndex, newRowIndex = rowIndex;
         do {
             endOfCurrentRunRowIndex = newRowIndex;
-#ifdef DO_IT_PANTHER
             newRowIndex = [selectedRowIndexes indexGreaterThanIndex:endOfCurrentRunRowIndex];
-#else
-            rowIndexNumber = [selectedRowEnumerator nextObject];
-            newRowIndex = rowIndexNumber ? [rowIndexNumber unsignedIntValue] : NSNotFound;
-#endif
         } while (newRowIndex == endOfCurrentRunRowIndex + 1);
             
         NSRect rowRect = NSUnionRect([self rectOfRow:rowIndex], [self rectOfRow:endOfCurrentRunRowIndex]);
@@ -146,10 +135,9 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
     CGColorSpaceRelease(colorSpace);
 }
 
-- (void)selectRow:(int)row byExtendingSelection:(BOOL)extend;
-{
-    [super selectRow:row byExtendingSelection:extend];
-    [self setNeedsDisplay:YES]; // we display extra because we draw multiple contiguous selected rows differently, so changing one row's selection can change how others draw.
+- (void)selectRowIndexes:(NSIndexSet *)indexes byExtendingSelection:(BOOL)extend {
+	[super selectRowIndexes:indexes byExtendingSelection:extend];
+	[self setNeedsDisplay:YES]; // we display extra because we draw multiple contiguous selected rows differently, so changing one row's selection can change how others draw.
 }
 
 - (void)deselectRow:(int)row;
