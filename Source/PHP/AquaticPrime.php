@@ -3,8 +3,8 @@
   * AquaticPrime PHP implementation
   * Creates license file from associative arrays and a public-private keypair
   * This implementation requires bcmath, which is included with PHP 4.0.4+
-  * @author Lucas Newman, Aquatic
-  * @copyright Copyright &copy; 2005 Lucas Newman
+  * @author Lucas Newman, Aquatic, and other contributors
+  * @copyright Copyright &copy; 2005-2010 Lucas Newman and other contributors
   * @license http://www.opensource.org/licenses/bsd-license.php BSD License
   */
   
@@ -126,7 +126,7 @@ function getSignature($dict, $key, $privKey)
     // We try to do it with native code first
     $aquatic_root = preg_replace('!((/[A-Za-z._-]+)+)/AquaticPrime\.php!', '$1', __FILE__);
     ob_start();
-    $passthruString = $aquatic_root."/aquaticprime $key $privKey '$fixedApostrophes'";
+    $passthruString = $aquatic_root."/aquaticprime $key $privKey $fixedApostrophes";
 
     passthru($passthruString, $err);
     $sig = ob_get_contents();
