@@ -2,19 +2,19 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1040</int>
-		<string key="IBDocument.SystemVersion">10B504</string>
+		<string key="IBDocument.SystemVersion">10C540</string>
 		<string key="IBDocument.InterfaceBuilderVersion">740</string>
-		<string key="IBDocument.AppKitVersion">1038.2</string>
-		<string key="IBDocument.HIToolboxVersion">437.00</string>
+		<string key="IBDocument.AppKitVersion">1038.25</string>
+		<string key="IBDocument.HIToolboxVersion">458.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			<string key="NS.object.0">740</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="300"/>
 			<integer value="29"/>
-			<integer value="261"/>
+			<integer value="262"/>
+			<integer value="300"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -611,7 +611,7 @@
 												<bytes key="NSWhite">MC45NzE3NzQyMgA</bytes>
 											</object>
 											<double key="NSRowHeight">17</double>
-											<int key="NSTvFlags">306184192</int>
+											<int key="NSTvFlags">308281344</int>
 											<reference key="NSDelegate"/>
 											<reference key="NSDataSource"/>
 											<int key="NSColumnAutoresizingStyle">0</int>
@@ -757,7 +757,7 @@
 																	</object>
 																	<object class="NSTableColumn" id="890331228">
 																		<string key="NSIdentifier">valueColumn</string>
-																		<double key="NSWidth">290</double>
+																		<double key="NSWidth">291</double>
 																		<double key="NSMinWidth">37.4013671875</double>
 																		<double key="NSMaxWidth">1000</double>
 																		<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -1162,7 +1162,7 @@
 															<object class="NSTextView" id="266111798">
 																<reference key="NSNextResponder" ref="168252993"/>
 																<int key="NSvFlags">2322</int>
-																<string key="NSFrame">{{0, 436}, {487, 14}}</string>
+																<string key="NSFrameSize">{487, 14}</string>
 																<reference key="NSSuperview" ref="168252993"/>
 																<reference key="NSNextKeyView" ref="420844281"/>
 																<object class="NSTextContainer" key="NSTextContainer" id="1057772642">
@@ -1232,13 +1232,12 @@
 																	<nil key="NSDefaultParagraphStyle"/>
 																</object>
 																<int key="NSTVFlags">6</int>
-																<string key="NSMaxSize">{629, 1e+07}</string>
+																<string key="NSMaxSize">{976, 1e+07}</string>
 																<string key="NSMinize">{114, 0}</string>
 																<nil key="NSDelegate"/>
 															</object>
 														</object>
 														<string key="NSFrame">{{1, 1}, {487, 157}}</string>
-														<string key="NSBounds">{{0, 452}, {487, 157}}</string>
 														<reference key="NSSuperview" ref="574959475"/>
 														<reference key="NSNextKeyView" ref="266111798"/>
 														<reference key="NSDocView" ref="266111798"/>
@@ -1261,7 +1260,7 @@
 													</object>
 													<object class="NSScroller" id="420844281">
 														<reference key="NSNextResponder" ref="574959475"/>
-														<int key="NSvFlags">256</int>
+														<int key="NSvFlags">-2147483392</int>
 														<string key="NSFrame">{{-100, -100}, {87, 18}}</string>
 														<reference key="NSSuperview" ref="574959475"/>
 														<reference key="NSNextKeyView" ref="342727269"/>
@@ -1342,7 +1341,7 @@
 															<object class="NSTextView" id="363686999">
 																<reference key="NSNextResponder" ref="141042642"/>
 																<int key="NSvFlags">2322</int>
-																<string key="NSFrameSize">{486, 56}</string>
+																<string key="NSFrameSize">{486, 14}</string>
 																<reference key="NSSuperview" ref="141042642"/>
 																<object class="NSTextContainer" key="NSTextContainer" id="845288974">
 																	<object class="NSLayoutManager" key="NSLayoutManager">
@@ -1398,8 +1397,8 @@
 																	<nil key="NSDefaultParagraphStyle"/>
 																</object>
 																<int key="NSTVFlags">6</int>
-																<string key="NSMaxSize">{486, 1e+07}</string>
-																<string key="NSMinize">{114, 56}</string>
+																<string key="NSMaxSize">{974, 1e+07}</string>
+																<string key="NSMinize">{114, 0}</string>
 																<nil key="NSDelegate"/>
 															</object>
 														</object>
@@ -1422,7 +1421,7 @@
 													</object>
 													<object class="NSScroller" id="236554256">
 														<reference key="NSNextResponder" ref="618866360"/>
-														<int key="NSvFlags">256</int>
+														<int key="NSvFlags">-2147483392</int>
 														<string key="NSFrame">{{-100, -100}, {87, 18}}</string>
 														<reference key="NSSuperview" ref="618866360"/>
 														<int key="NSsFlags">1</int>
@@ -1453,7 +1452,7 @@
 															<object class="NSTextView" id="820456284">
 																<reference key="NSNextResponder" ref="353399825"/>
 																<int key="NSvFlags">2322</int>
-																<string key="NSFrameSize">{486, 56}</string>
+																<string key="NSFrameSize">{486, 14}</string>
 																<reference key="NSSuperview" ref="353399825"/>
 																<object class="NSTextContainer" key="NSTextContainer" id="908844350">
 																	<object class="NSLayoutManager" key="NSLayoutManager">
@@ -1509,8 +1508,8 @@
 																	<nil key="NSDefaultParagraphStyle"/>
 																</object>
 																<int key="NSTVFlags">6</int>
-																<string key="NSMaxSize">{486, 1e+07}</string>
-																<string key="NSMinize">{114, 56}</string>
+																<string key="NSMaxSize">{974, 1e+07}</string>
+																<string key="NSMinize">{114, 0}</string>
 																<nil key="NSDelegate"/>
 															</object>
 														</object>
@@ -1533,7 +1532,7 @@
 													</object>
 													<object class="NSScroller" id="702777039">
 														<reference key="NSNextResponder" ref="877560700"/>
-														<int key="NSvFlags">256</int>
+														<int key="NSvFlags">-2147483392</int>
 														<string key="NSFrame">{{-100, -100}, {87, 18}}</string>
 														<reference key="NSSuperview" ref="877560700"/>
 														<int key="NSsFlags">1</int>
@@ -1678,7 +1677,7 @@
 				<object class="NSMutableString" key="NSViewClass">
 					<characters key="NS.bytes">View</characters>
 				</object>
-				<string key="NSWindowContentMaxSize">{10000, 102}</string>
+				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<string key="NSWindowContentMinSize">{450, 102}</string>
 				<object class="NSView" key="NSWindowView" id="585450616">
 					<reference key="NSNextResponder"/>
@@ -1773,7 +1772,7 @@
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 938}}</string>
 				<string key="NSMinSize">{450, 124}</string>
-				<string key="NSMaxSize">{10000, 124}</string>
+				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
 			</object>
 			<object class="NSCustomObject" id="407830015">
 				<string key="NSClassName">LicenseController</string>
@@ -1790,10 +1789,10 @@
 				<object class="NSMutableString" key="NSViewClass">
 					<characters key="NS.bytes">View</characters>
 				</object>
-				<string key="NSWindowContentMaxSize">{10000, 102}</string>
+				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<string key="NSWindowContentMinSize">{381, 102}</string>
 				<object class="NSView" key="NSWindowView" id="1050213864">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1802,7 +1801,6 @@
 							<int key="NSvFlags">256</int>
 							<string key="NSFrame">{{177, 60}, {184, 22}}</string>
 							<reference key="NSSuperview" ref="1050213864"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="204744003">
 								<int key="NSCellFlags">-1804468671</int>
@@ -1820,7 +1818,6 @@
 							<int key="NSvFlags">256</int>
 							<string key="NSFrame">{{20, 61}, {143, 17}}</string>
 							<reference key="NSSuperview" ref="1050213864"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="208506442">
 								<int key="NSCellFlags">67239424</int>
@@ -1837,7 +1834,6 @@
 							<int key="NSvFlags">256</int>
 							<string key="NSFrame">{{285, 12}, {82, 32}}</string>
 							<reference key="NSSuperview" ref="1050213864"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="574902002">
 								<int key="NSCellFlags">67239424</int>
@@ -1859,7 +1855,6 @@
 							<int key="NSvFlags">256</int>
 							<string key="NSFrame">{{203, 12}, {82, 32}}</string>
 							<reference key="NSSuperview" ref="1050213864"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="178268069">
 								<int key="NSCellFlags">67239424</int>
@@ -1880,12 +1875,10 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{381, 102}</string>
-					<reference key="NSSuperview"/>
-					<reference key="NSWindow"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 938}}</string>
 				<string key="NSMinSize">{381, 124}</string>
-				<string key="NSMaxSize">{10000, 124}</string>
+				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
 			</object>
 			<object class="NSMenu" id="1018975478">
 				<string key="NSTitle">Menu</string>
@@ -3671,6 +3664,7 @@
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="NSArray" key="dict.sortedKeys">
 					<bool key="EncodedWithXMLCoder">YES</bool>
+					<string>-3.IBPluginDependency</string>
 					<string>103.IBPluginDependency</string>
 					<string>103.ImportedFromIB2</string>
 					<string>106.IBPluginDependency</string>
@@ -3895,20 +3889,61 @@
 					<string>599.IBPluginDependency</string>
 					<string>599.ImportedFromIB2</string>
 					<string>604.ImportedFromIB2</string>
+					<string>613.IBPluginDependency</string>
+					<string>614.IBPluginDependency</string>
+					<string>615.IBPluginDependency</string>
+					<string>616.IBPluginDependency</string>
+					<string>617.IBPluginDependency</string>
+					<string>618.IBPluginDependency</string>
+					<string>619.IBPluginDependency</string>
+					<string>620.IBPluginDependency</string>
+					<string>621.IBPluginDependency</string>
+					<string>622.IBPluginDependency</string>
+					<string>623.IBPluginDependency</string>
+					<string>624.IBPluginDependency</string>
+					<string>625.IBPluginDependency</string>
+					<string>626.IBPluginDependency</string>
+					<string>627.IBPluginDependency</string>
+					<string>628.IBPluginDependency</string>
+					<string>629.IBPluginDependency</string>
+					<string>630.IBPluginDependency</string>
+					<string>631.IBPluginDependency</string>
+					<string>632.IBPluginDependency</string>
+					<string>633.IBPluginDependency</string>
+					<string>634.IBPluginDependency</string>
+					<string>635.IBPluginDependency</string>
+					<string>636.IBPluginDependency</string>
+					<string>637.IBPluginDependency</string>
+					<string>638.CustomClassName</string>
+					<string>638.IBPluginDependency</string>
 					<string>638.IBShouldRemoveOnLegacySave</string>
+					<string>639.IBPluginDependency</string>
 					<string>639.IBShouldRemoveOnLegacySave</string>
+					<string>640.IBPluginDependency</string>
 					<string>640.IBShouldRemoveOnLegacySave</string>
+					<string>641.IBPluginDependency</string>
 					<string>641.IBShouldRemoveOnLegacySave</string>
+					<string>642.IBPluginDependency</string>
 					<string>642.IBShouldRemoveOnLegacySave</string>
+					<string>643.IBPluginDependency</string>
 					<string>643.IBShouldRemoveOnLegacySave</string>
+					<string>644.IBPluginDependency</string>
 					<string>644.IBShouldRemoveOnLegacySave</string>
+					<string>645.IBPluginDependency</string>
 					<string>645.IBShouldRemoveOnLegacySave</string>
+					<string>646.IBPluginDependency</string>
 					<string>646.IBShouldRemoveOnLegacySave</string>
+					<string>647.IBPluginDependency</string>
 					<string>647.IBShouldRemoveOnLegacySave</string>
+					<string>648.IBPluginDependency</string>
 					<string>648.IBShouldRemoveOnLegacySave</string>
+					<string>649.IBPluginDependency</string>
 					<string>649.IBShouldRemoveOnLegacySave</string>
+					<string>650.IBPluginDependency</string>
 					<string>650.IBShouldRemoveOnLegacySave</string>
+					<string>651.IBPluginDependency</string>
 					<string>651.IBShouldRemoveOnLegacySave</string>
+					<string>652.IBPluginDependency</string>
 					<string>652.IBShouldRemoveOnLegacySave</string>
 					<string>81.IBPluginDependency</string>
 					<string>81.ImportedFromIB2</string>
@@ -3922,7 +3957,6 @@
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3949,14 +3983,16 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<boolean value="YES"/>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{88, 686}, {695, 448}}</string>
+					<string>{{235, 615}, {695, 448}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{88, 686}, {695, 448}}</string>
+					<string>{{235, 615}, {695, 448}}</string>
 					<boolean value="YES"/>
 					<boolean value="NO"/>
 					<boolean value="YES"/>
@@ -4000,7 +4036,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{305, 960}, {450, 102}}</string>
 					<boolean value="YES"/>
-					<boolean value="YES"/>
+					<boolean value="NO"/>
 					<boolean value="YES"/>
 					<string>{10000, 102}</string>
 					<string>{450, 102}</string>
@@ -4044,7 +4080,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{280, 965}, {381, 102}}</string>
 					<boolean value="YES"/>
-					<boolean value="YES"/>
+					<boolean value="NO"/>
 					<boolean value="YES"/>
 					<string>{10000, 102}</string>
 					<string>{381, 102}</string>
@@ -4145,20 +4181,61 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>AQTextFieldCell</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
@@ -4208,7 +4285,16 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">AQTextFieldCell</string>
+					<string key="superclassName">NSTextFieldCell</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Classes/AQAppKit/AQTextFieldCell.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">FirstResponder</string>
+					<string key="superclassName">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBUserSource</string>
 						<string key="minorKey"/>

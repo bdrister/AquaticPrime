@@ -43,11 +43,6 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlen
 
 @implementation OAGradientTableView
 
-- (void)awakeFromNib
-{
-	[[self tableColumnWithIdentifier:@"productColumn"] setDataCell:[[AQTextFieldCell alloc] init]]; 
-}
-
 // API
 
 - (void)setAcceptsFirstMouse:(BOOL)flag;
