@@ -272,13 +272,24 @@
 
 	NSString *newProductPath = [[@"~/Library/Application Support/Aquatic/Product Keys" stringByExpandingTildeInPath] 
 							stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", object]];
+	
+	NSString *oldTemplateProductPath = [[@"~/Library/Application Support/Aquatic/License Templates" stringByExpandingTildeInPath] 
+										stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", [productArray objectAtIndex:row]]];
+
+	NSString *newTemplateProductPath = [[@"~/Library/Application Support/Aquatic/License Templates" stringByExpandingTildeInPath] 
+										stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", object]];
 							
 	[fm movePath:oldProductPath toPath:newProductPath handler:nil];
+	[fm movePath:oldTemplateProductPath toPath:newTemplateProductPath handler:nil];
 	
 	// Change the name
 	[productArray replaceObjectAtIndex:row withObject:object];
 	[productArray sortUsingSelector:@selector(caseInsensitiveCompare:)];
 	[productTable reloadData];
+	
+	// Select the renamed item
+	[productTable selectRowIndexes:[NSIndexSet indexSetWithIndex:[productArray indexOfObject:object]]
+			  byExtendingSelection:NO];
 }
 
 @end
