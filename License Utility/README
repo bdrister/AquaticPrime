@@ -1,0 +1,8 @@
+The License Utility is used to generate key pairs for use with Aquatic Prime, and allows the manual generation and verification of license files.
+
+
+
+COMPATIBILITY NOTE:
+Currently, the License Utility defaults to using 10.4 as the base SDK. If you're developing on 10.6+ and don't have the 10.4 SDK installed, you can use the 10.6 SDK as long as the Architectures [ARCHS] build setting is configured for 32-bit only. (A 64-bit build will hang; known issue.)
+
+Updating the License Utility to more modern APIs is issue #5: http://github.com/bdrister/AquaticPrime/issues#issue/5.
