@@ -56,6 +56,7 @@ Boolean APSetKey(CFStringRef key)
 	// BEGIN adib 9-Apr-2010 14:56
 	// check return value and make sure we don't get a NULL pointer.
 	if (!keyCStringBuffer) {
+		CFRelease(mutableKey);
 		return FALSE;
 	}
 	// END adib 9-Apr-2010 14:56
