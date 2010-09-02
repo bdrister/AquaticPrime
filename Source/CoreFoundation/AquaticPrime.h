@@ -37,7 +37,7 @@ CFDictionaryRef APCreateDictionaryForLicenseFile(CFURLRef path);
 Boolean APVerifyLicenseData(CFDataRef data);
 Boolean APVerifyLicenseFile(CFURLRef path);
 
-CFStringRef APHash();
+CFStringRef APHash(void);
 void APBlacklistAdd(CFStringRef blacklistEntry);
 void APSetBlacklist(CFArrayRef hashArray);
 

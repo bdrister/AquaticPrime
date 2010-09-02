@@ -30,6 +30,8 @@ static RSA *rsaKey;
 static __strong CFStringRef hash;
 static __strong CFMutableArrayRef blacklist;
 
+static void APSetHash(CFStringRef newHash);
+
 Boolean APSetKey(CFStringRef key)
 {
     hash = CFSTR("");
@@ -45,7 +47,7 @@ Boolean APSetKey(CFStringRef key)
     if (!mutableKey)
         return FALSE;
     
-    unsigned int maximumCStringLength = CFStringGetMaximumSizeForEncoding(CFStringGetLength(mutableKey), kCFStringEncodingMacRoman) + 1;
+    CFIndex maximumCStringLength = CFStringGetMaximumSizeForEncoding(CFStringGetLength(mutableKey), kCFStringEncodingMacRoman) + 1;
     char *keyCStringBuffer = malloc(maximumCStringLength);
     
     // Determine if we have a hex or decimal key
@@ -124,7 +126,7 @@ CFDictionaryRef APCreateDictionaryForLicenseData(CFDataRef data)
     // Decrypt the signature
 	int checkDigestMaxSize = RSA_size(rsaKey)-11;
     unsigned char checkDigest[checkDigestMaxSize];
-    if (RSA_public_decrypt(sigDataLength, sigBytes, checkDigest, rsaKey, RSA_PKCS1_PADDING) != SHA_DIGEST_LENGTH) {
+    if (RSA_public_decrypt((int) sigDataLength, sigBytes, checkDigest, rsaKey, RSA_PKCS1_PADDING) != SHA_DIGEST_LENGTH) {
         CFRelease(licenseDictionary);
         return NULL;
     }
@@ -161,7 +163,7 @@ CFDictionaryRef APCreateDictionaryForLicenseData(CFDataRef data)
     for (i = 0; i < count; i++)
     {
         char *valueBytes;
-        int valueLengthAsUTF8;
+        CFIndex valueLengthAsUTF8;
         CFStringRef key = CFArrayGetValueAtIndex(keyArray, i);
         CFStringRef value = CFDictionaryGetValue(licenseDictionary, key);
         
