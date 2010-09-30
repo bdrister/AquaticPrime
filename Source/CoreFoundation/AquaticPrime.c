@@ -30,6 +30,8 @@ static RSA *rsaKey;
 static __strong CFStringRef hash;
 static __strong CFMutableArrayRef blacklist;
 
+static void APSetHash(CFStringRef newHash);
+
 Boolean APSetKey(CFStringRef key)
 {
     hash = CFSTR("");
