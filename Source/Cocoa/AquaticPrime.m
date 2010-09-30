@@ -138,7 +138,7 @@
 	NSString *nString = [[NSString alloc] initWithUTF8String:cString];
 	OPENSSL_free(cString);
 	
-	return nString;
+	return [nString autorelease];
 }
 
 - (NSString *)privateKey
@@ -151,7 +151,7 @@
 	NSString *dString = [[NSString alloc] initWithUTF8String:cString];
 	OPENSSL_free(cString);
 	
-	return dString;
+	return [dString autorelease];
 }
 
 - (void)setHash:(NSString *)newHash
@@ -224,7 +224,7 @@
 	
 	// Create the license dictionary
 	NSMutableDictionary *licenseDict = [NSMutableDictionary dictionaryWithDictionary:dict];
-	[licenseDict setObject:[NSData dataWithBytes:signature length:bytes]  forKey:@"Signature"];
+	[licenseDict setObject:[NSData dataWithBytesNoCopy:signature length:bytes]  forKey:@"Signature"];
 	
 	// Create the data from the dictionary
 	NSString *error = nil;
