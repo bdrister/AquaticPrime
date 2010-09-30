@@ -102,13 +102,9 @@
 	
 	// Determine if we have hex or decimal values
 	int result;
-	
-	if ([[key lowercaseString] hasPrefix:@"0x"]) {
-		// BEGIN adib 2-Apr-2010
-		//result = BN_hex2bn(&rsaKey->n, (const char *)[[key substringFromIndex:2] UTF8String]);
-		result = BN_hex2bn(&rsaKey->n, (const char *)[[key substringFromIndex: (NSUInteger) 2U] UTF8String]);
-		// END adib 2-Apr-2010
-	} else
+	if ([[key lowercaseString] hasPrefix:@"0x"])
+		result = BN_hex2bn(&rsaKey->n, (const char *)[[key substringFromIndex:2] UTF8String]);
+	else
 		result = BN_dec2bn(&rsaKey->n, (const char *)[key UTF8String]);
 		
 	if (!result) {
@@ -118,13 +114,9 @@
 	
 	// Do the private portion if it exists
 	if (privateKey && ![privateKey isEqualToString:@""]) {
-		if ([[privateKey lowercaseString] hasPrefix:@"0x"]) {
-			// BEGIN adib 2-Apr-2010
-			// 64-bit clean modifications
-			//result = BN_hex2bn(&rsaKey->d, (const char *)[[privateKey substringFromIndex:2] UTF8String]);
-			result = BN_hex2bn(&rsaKey->d, (const char *)[[privateKey substringFromIndex:(NSUInteger) 2U] UTF8String]);
-			// END adib 2-Apr-2010
-		} else
+		if ([[privateKey lowercaseString] hasPrefix:@"0x"])
+			result = BN_hex2bn(&rsaKey->d, (const char *)[[privateKey substringFromIndex:2] UTF8String]);
+		else
 			result = BN_dec2bn(&rsaKey->d, (const char *)[privateKey UTF8String]);
 			
 		if (!result) {
@@ -198,13 +190,8 @@
 	
 	// Sort the keys so we always have a uniform order
 	[keyArray sortUsingSelector:@selector(caseInsensitiveCompare:)];
-
-	// BEGIN adib 2-Apr-2010 09:44
-	// 64-bit clean modifications
-	//int i;
+	
 	NSUInteger i;
-	// END adib 2-Apr-2010 09:44
-
 	for (i = 0; i < [keyArray count]; i++)
 	{
 		id curValue = [dict objectForKey:[keyArray objectAtIndex:i]];
@@ -219,64 +206,31 @@
 	
 	// Create the signature from 20 byte hash
 	int rsaLength = RSA_size(rsaKey);
-	
-	// BEGIN adib 2-Apr-2010 09:47
-	// 64-bit clean modifications
-	//unsigned char *signature = (unsigned char*)malloc(rsaLength);
-	unsigned char *signature = NULL;
-	if (rsaLength > 0) {
-		signature = (unsigned char*)malloc((size_t) rsaLength);
-	} else {
+	if (rsaLength <= 0) {
+		[self _setError:[NSString stringWithFormat:@"Invalid RSA_size: %d", rsaLength]];
 		return nil;
 	}
-	// END adib 2-Apr-2010 09:47
+	
+	unsigned char *signature = (unsigned char*)malloc(rsaLength);
 
 	int bytes = RSA_private_encrypt(20, digest, signature, rsaKey, RSA_PKCS1_PADDING);
 	
-	// BEGIN adib 2-Apr-2010 09:51
-	// 64-bit clean modifications
-	/*
-	 if (bytes == -1) {
-	 [self _setError:[NSString stringWithUTF8String:(char*)ERR_error_string(ERR_get_error(), NULL)]];
-	 return nil;
-	 }
-	 // Create the license dictionary
-	 NSMutableDictionary *licenseDict = [NSMutableDictionary dictionaryWithDictionary:dict];
-	 
-	 [licenseDict setObject:[NSData dataWithBytes:signature length:bytes]  forKey:@"Signature"];
-	 */
-	 if (bytes < 0) {
-		 [self _setError:[NSString stringWithUTF8String:(char*)ERR_error_string(ERR_get_error(), NULL)]];
-		 if (signature) {
-			 free(signature);
-		 }
-		 return nil;
-	 }
-	 // Create the license dictionary
-	 NSMutableDictionary *licenseDict = [NSMutableDictionary dictionaryWithDictionary:dict];
-	 
-	 [licenseDict setObject:[NSData dataWithBytes:signature length:(NSUInteger) bytes]  forKey:@"Signature"];
-	// END adib 2-Apr-2010 09:51
+	if (bytes < 0) {
+		[self _setError:[NSString stringWithUTF8String:(char*)ERR_error_string(ERR_get_error(), NULL)]];
+		if (signature)
+			free(signature);
+		return nil;
+	}
+	
+	// Create the license dictionary
+	NSMutableDictionary *licenseDict = [NSMutableDictionary dictionaryWithDictionary:dict];
+	[licenseDict setObject:[NSData dataWithBytes:signature length:bytes]  forKey:@"Signature"];
 	
 	// Create the data from the dictionary
-	// BEGIN adib 2-Apr-2010 09:57
-	// 64-bit clean modifications
-	//NSString *error;
 	NSString *error = nil;
-	// END adib 2-Apr-2010 09:57
-	
-
-	// BEGIN adib 2-Apr-2010 09:56
-	// 64-bit clean modifications
-	/*
-	 NSData *licenseFile = [[NSPropertyListSerialization dataFromPropertyList:licenseDict 
-	 format:kCFPropertyListXMLFormat_v1_0 
-	 errorDescription:&error] retain];
-	 */
-	 NSData *licenseFile = [[NSPropertyListSerialization dataFromPropertyList:licenseDict 
-					 format:(NSPropertyListFormat)kCFPropertyListXMLFormat_v1_0 
-					 errorDescription:&error] retain];
-	// END adib 2-Apr-2010 09:56
+	NSData *licenseFile = [NSPropertyListSerialization dataFromPropertyList:licenseDict 
+																	 format:kCFPropertyListXMLFormat_v1_0 
+														   errorDescription:&error];
 	
 	if (!licenseFile) {
 		[self _setError:error];
@@ -318,22 +272,8 @@
 	
 	// Decrypt the signature - should get 20 bytes back
 	unsigned char checkDigest[20];
-	// BEGIN adib 2-Apr-2010 10:00
-	// 64-bit clean modifications
-	/*
 	if (RSA_public_decrypt([signature length], [signature bytes], checkDigest, rsaKey, RSA_PKCS1_PADDING) != 20)
 		return nil;
-	 */
-	const NSUInteger signatureLength = [signature length];
-	if (signatureLength <= INT_MAX) {
-		if (RSA_public_decrypt((int)signatureLength, [signature bytes], checkDigest, rsaKey, RSA_PKCS1_PADDING) != 20) {
-			return nil;
-		}
-	} else {
-		return nil;
-	}
-	// END adib 2-Apr-2010 10:00
-	
 	
 	// Make sure the license hash isn't on the blacklist
 	NSMutableString *hashCheck = [NSMutableString string];
@@ -357,12 +297,7 @@
 	// Sort the keys so we always have a uniform order
 	[keyArray sortUsingSelector:@selector(caseInsensitiveCompare:)];
 	
-	// BEGIN adib 2-Apr-2010 10:02
-	// 64-bit clean modifications
-	//int objectIndex;
 	NSUInteger objectIndex;
-	// END adib 2-Apr-2010 10:02
-	
 	for (objectIndex = 0; objectIndex < [keyArray count]; objectIndex++)
 	{
 		id currentValue = [licenseDict objectForKey:[keyArray objectAtIndex:objectIndex]];
