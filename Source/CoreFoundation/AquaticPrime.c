@@ -45,21 +45,13 @@ Boolean APSetKey(CFStringRef key)
     if (!mutableKey)
         return FALSE;
 	
-    // BEGIN adib 9-Apr-2010 14:54
-	// 64-bit clean modifications
-    //unsigned int maximumCStringLength = CFStringGetMaximumSizeForEncoding(CFStringGetLength(mutableKey), kCFStringEncodingMacRoman) + 1;
     CFIndex maximumCStringLength = CFStringGetMaximumSizeForEncoding(CFStringGetLength(mutableKey), kCFStringEncodingMacRoman) + 1;
-	// END adib 9-Apr-2010 14:54
 	
     char *keyCStringBuffer = malloc(maximumCStringLength);
-	
-	// BEGIN adib 9-Apr-2010 14:56
-	// check return value and make sure we don't get a NULL pointer.
 	if (!keyCStringBuffer) {
 		CFRelease(mutableKey);
 		return FALSE;
 	}
-	// END adib 9-Apr-2010 14:56
     
     // Determine if we have a hex or decimal key
     CFStringLowercase(mutableKey, NULL);
@@ -138,13 +130,8 @@ CFDictionaryRef APCreateDictionaryForLicenseData(CFDataRef data)
 	int checkDigestMaxSize = RSA_size(rsaKey)-11;
     unsigned char checkDigest[checkDigestMaxSize];
 	
-	// BEGIN adib 9-Apr-2010 14:59
-	// 64-bit clean modifications
-	// we rely on short-circuit evaluation on this one.
-    //if (RSA_public_decrypt(sigDataLength, sigBytes, checkDigest, rsaKey, RSA_PKCS1_PADDING) != SHA_DIGEST_LENGTH) {
-    if ((sigDataLength >=0 && sigDataLength <= INT_MAX) && RSA_public_decrypt((int)sigDataLength, sigBytes, checkDigest, rsaKey, RSA_PKCS1_PADDING) != SHA_DIGEST_LENGTH) {
-	// END adib 9-Apr-2010 14:59
-
+    if (sigDataLength < 0 || sigDataLength > INT_MAX ||
+		RSA_public_decrypt((int)sigDataLength, sigBytes, checkDigest, rsaKey, RSA_PKCS1_PADDING) != SHA_DIGEST_LENGTH) {
         CFRelease(licenseDictionary);
         return NULL;
     }
@@ -181,11 +168,7 @@ CFDictionaryRef APCreateDictionaryForLicenseData(CFDataRef data)
     for (i = 0; i < count; i++)
     {
         char *valueBytes;
-		// BEGIN adib 9-Apr-2010 15:06
-		// 64-bit clean modifications.
-        //int valueLengthAsUTF8;
-        CFIndex valueLengthAsUTF8;
-		// END adib 9-Apr-2010 15:06
+		CFIndex valueLengthAsUTF8;
         CFStringRef key = CFArrayGetValueAtIndex(keyArray, i);
         CFStringRef value = CFDictionaryGetValue(licenseDictionary, key);
         
