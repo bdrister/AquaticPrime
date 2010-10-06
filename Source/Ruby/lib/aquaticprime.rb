@@ -2,10 +2,13 @@
 
 # Ruby implementation of AquaticPrime license generation.
 # Written by John Labovitz <johnl@johnlabovitz.com>.
+# Updated by Benjamin Rister <aquaticprime@decimus.net>.
+
+require 'rubygems'
 
 require 'digest/sha1'
 require 'plist'
-require 'base64'
+require 'stringio'
 
 
 module Math
