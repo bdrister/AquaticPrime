@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>lowercase key</key>
+	<string>Keys should be sorted case-insensitive</string>
+	<key>Signature</key>
+	<data>RIhF/3CgyXzPg2wCQ5LShf6W9khtqPcqUDLAHcAZdOIcoeR7PoOHi15423kxq5jOh1lmcztBoUJFu8mB45MHE0jmmbRw3qK6FJz9Py2gi1XvGOgH3GW713OCvQBE7vfBj4ZriP0+FS18nLfrtM6Xp0mAd1la4DD4oh7d35dlYTY=</data>
+	<key>Email</key>
+	<string>user@email.com</string>
+	<key>Name</key>
+	<string>Üsér Diacriticà</string>
+</dict>
+</plist>

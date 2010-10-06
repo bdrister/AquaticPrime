@@ -1,0 +1,27 @@
+This directory contains some example test cases that can be used to test the correctness of various implementations.
+
+Licenses marked as "Valid" should be accepted by license checkers, while licenses marked as "Invalid" should be rejected. For license generators, the "Valid" licenses show what the correct signature data should be.
+
+The keys used for these licenses are:
+Public
+0xAAD0DC5705017D4AA1CD3FA194771E97B263E68308DC09D3D9297247D175CCD05DFE410B9426D3C8019BA6B92D34F21B454D8D8AC8CAD2FB37850987C02592012D658911442C27F4D9B050CFA3F7C07FF81CFEEBE33E1E43595B2ACCC2019DC7247829017A91D40020F9D8BF67300CE744263B4F34FF42E3A7BE3CF37C4004EB
+Private
+0x71E092E4AE00FE31C1337FC10DA4BF0FCC4299ACB092B137E61BA185364E888AE9542B5D0D6F37DAABBD19D0C8CDF6BCD8DE5E5C85DC8CA77A58B1052AC3B6AA5C7EA2E58BD484050184D2E241CFCB1D6AB4AC8617499056060833D8F6699B9C54E3BAA36123AFD5B4DDE6F2ADFC08F6970C3BA5C80B9A0A04CB6C6B73DD512B
+
+(Do not use these keys in your product. Generate keys for your product using the AquaticPrime Developer License Utility.)
+
+
+************
+*** Easy ***
+************
+
+The Easy example is good for just testing the basic functionality, and doesn't get into any screwy corner cases. For many users, an implementation that passes these tests will be "good enough."
+
+
+************
+*** Hard ***
+************
+
+The Hard example tests some of the corner cases that an implementation might not handle correctly. In particular, it stresses the flattening of a license dictionary into a single canonical data stream for signing, as that's the weakest link and the one most likely to fall victim to bugs or differences in platforms.
+
+No invalid examples are given for these tests; any problems are going to manifest themselves as generating invalid licenses or rejecting valid ones.
