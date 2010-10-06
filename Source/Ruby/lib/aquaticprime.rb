@@ -36,8 +36,7 @@ class AquaticPrime
   end
   
   def signature(information)
-	
-  	total = information.sort.map { |key, value| value }.join('')
+	total = information.sort{|a,b| a.downcase <=> b.downcase || a <=> b}.map{|key,value| value}.join('')
 	  
   	hash = Digest::SHA1.hexdigest(total)
   	hash = '0001' + ('ff' * 105) + '00' + hash
