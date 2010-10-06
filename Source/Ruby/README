@@ -1,0 +1,31 @@
+Ruby AquaticPrime Implementation
+	Original implementation by John Labovitz
+	Updated and gemmed by Benjamin Rister
+	http://github.com/bdrister/AquaticPrime
+
+
+== DESCRIPTION:
+
+AquaticPrime is a cryptographically secure licensing method for shareware applications. The Ruby implementation currently only generates licenses, and is intended for use in online stores.
+
+See http://github.com/bdrister/AquaticPrime for information about the overall design and usage of AquaticPrime.
+
+
+== INSTALL:
+
+For a freestanding install:
+	sudo gem install aquaticprime
+	
+If using Rails 3, add this to your Gemfile…
+	gem 'aquaticprime'
+…then run "bundle install".
+
+
+== EXAMPLE:
+
+	require 'aquaticprime'
+	
+	publicKey  = '0xE9D8BF...' # from AquaticPrime Developer License Utility
+	privateKey = '0x9BE7F9...' # from AquaticPrime Developer License Utility
+	aquatic_prime = AquaticPrime.new(publicKey, privateKey)
+	puts aquatic_prime.license_data('name' => 'User Name', 'email' => 'User Email')
