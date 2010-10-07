@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-# Ruby implementation of AquaticPrime license generation.
+# AquaticPrime is a cryptographically secure licensing method for shareware
+# applications. The Ruby implementation currently only generates licenses, and
+# is intended for use in online stores.
 # Written by John Labovitz <johnl@johnlabovitz.com>.
 # Updated by Benjamin Rister <aquaticprime@decimus.net>.
 
@@ -12,7 +14,8 @@ require 'stringio'
 
 
 module Math
-  
+
+  # Calculates x^a mod m. Useful for public key encryption calculations.
   def self.powmod(x, a, m)
   	r = 1
   	while a > 0
@@ -28,13 +31,22 @@ module Math
 end
 
 
+# AquaticPrime instances are associated with a given public/private key
+# pair, and generate signed license plists for input Hash instances.
+
 class AquaticPrime
 
+  # Returns a new AquaticPrime generator with the given public and private keys.
+  # Keys should be provided as hex strings.
   def initialize(pubKey, privKey)
     @pubKey = pubKey
     @privKey = privKey
   end
   
+  # Calculates the cryptographic signature for a given Hash, returned as a
+  # String.
+  # This is generally only of internal interest, but on rare instances
+  # clients may wish to calculate this value.
   def signature(information)
 	total = information.sort{|a,b| a[0].downcase <=> b[0].downcase || a[0] <=> b[0]}.map{|key,value| value}.join('')
 	  
@@ -51,6 +63,10 @@ class AquaticPrime
   	sig
   end
 
+  # Returns a String containing a signed license plist based on the given
+  # license_info Hash.
+  # The result is suitable content for a license file via a download, email
+  # attachment, or any other delivery mechanism to the end user.
   def license_data(license_info)
     signed_license_info = license_info.dup
     
