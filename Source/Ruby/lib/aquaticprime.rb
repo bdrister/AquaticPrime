@@ -51,7 +51,7 @@ class AquaticPrime
   	sig
   end
 
-  def licence_data(license_info)
+  def license_data(license_info)
     signed_license_info = license_info.dup
     
     # Sign the license info.
@@ -76,7 +76,7 @@ if $0 == __FILE__
   	'Name' => 'User'
   }
   puts 'EASY LICENSE RESULTS:'
-  puts aquatic_prime.licence_data(easy_license)
+  puts aquatic_prime.license_data(easy_license)
   
   hard_license = {
   	'Email' => 'user@email.com',
@@ -84,5 +84,5 @@ if $0 == __FILE__
   	'lowercase key' => 'Keys should be sorted case-insensitive'
   }
   puts 'HARD LICENSE RESULTS:'
-  puts aquatic_prime.licence_data(hard_license)
+  puts aquatic_prime.license_data(hard_license)
 end
