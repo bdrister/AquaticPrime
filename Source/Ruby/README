@@ -14,9 +14,9 @@ See http://github.com/bdrister/AquaticPrime for information about the overall de
 == INSTALL:
 
 For a freestanding install:
-	sudo gem install aquaticprime
+	gem install aquaticprime
 	
-If using Rails 3, add this to your Gemfile…
+If using Bundler (e.g. Rails 3), add this to your Gemfile…
 	gem 'aquaticprime'
 …then run "bundle install".
 
