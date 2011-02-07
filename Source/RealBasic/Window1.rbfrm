@@ -45,7 +45,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   2
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   ""
       TextAlign       =   1
       TextColor       =   0
@@ -78,7 +77,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   1
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Drag license over this window"
       TextAlign       =   1
       TextColor       =   0
@@ -204,7 +202,6 @@ Begin Window Window1
       Scope           =   0
       TabIndex        =   4
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Public key (drag or paste hex)"
       TextAlign       =   0
       TextColor       =   0
@@ -259,16 +256,24 @@ End
 		    staticText1.text = "License is NOT VALID!!"
 		    staticText1.visible = true
 		  else
-		    Listbox1.deleteAllRows
-		    StaticText2.text = ""
-		    for i as integer = 0 to licenseDict.count-1
-		      Listbox1.addRow licenseDict.key(i)
-		      Listbox1.cell(listbox1.lastIndex, 1) = licenseDict.value(licenseDict.key(i))
-		    next
-		    StaticText2.text = "License Hash: "+licenseValidator.hash
-		    staticText1.visible = false
-		    staticText2.visible = true
-		    listbox1.visible = true
+		    if licenseValidator.LastError <> "" then
+		      beep
+		      Listbox1.visible = false
+		      StaticText2.visible = false
+		      staticText1.text = "Error: "+licenseValidator.LastError
+		      staticText1.visible = true
+		    else
+		      Listbox1.deleteAllRows
+		      StaticText2.text = ""
+		      for i as integer = 0 to licenseDict.count-1
+		        Listbox1.addRow licenseDict.key(i)
+		        Listbox1.cell(listbox1.lastIndex, 1) = licenseDict.value(licenseDict.key(i))
+		      next
+		      StaticText2.text = "License Hash: "+licenseValidator.hash
+		      staticText1.visible = false
+		      staticText2.visible = true
+		      listbox1.visible = true
+		    end
 		  end if
 		End Sub
 	#tag EndMethod
