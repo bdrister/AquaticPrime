@@ -221,7 +221,7 @@ End
 		Sub DropObject(obj As DragItem, action As Integer)
 		  
 		  if obj.folderItemAvailable then
-		    TestLicense obj.folderItem
+		    CheckLicense obj.folderItem
 		  end if
 		End Sub
 	#tag EndEvent
@@ -243,24 +243,27 @@ End
 
 
 	#tag Method, Flags = &h0
-		Sub TestLicense(licenseFile as folderItem)
+		Sub CheckLicense(licenseFile as folderItem)
 		  
 		  licenseValidator = new AquaticPrime(TextArea1.text)
 		  
-		  dim licenseDict as dictionary = licenseValidator.DictionaryForLicenseFile(licenseFile)
-		  
-		  if licenseDict = nil then
+		  if licenseValidator.LastError <> "" then
+		    
 		    beep
 		    Listbox1.visible = false
 		    StaticText2.visible = false
-		    staticText1.text = "License is NOT VALID!!"
+		    staticText1.text = "Error: "+licenseValidator.LastError
 		    staticText1.visible = true
+		    
 		  else
-		    if licenseValidator.LastError <> "" then
+		    
+		    dim licenseDict as dictionary = licenseValidator.DictionaryForLicenseFile(licenseFile)
+		    
+		    if licenseDict = nil then
 		      beep
 		      Listbox1.visible = false
 		      StaticText2.visible = false
-		      staticText1.text = "Error: "+licenseValidator.LastError
+		      staticText1.text = "License is NOT VALID: "+licenseValidator.LastError
 		      staticText1.visible = true
 		    else
 		      Listbox1.deleteAllRows
@@ -273,7 +276,8 @@ End
 		      staticText1.visible = false
 		      staticText2.visible = true
 		      listbox1.visible = true
-		    end
+		    end if
+		    
 		  end if
 		End Sub
 	#tag EndMethod

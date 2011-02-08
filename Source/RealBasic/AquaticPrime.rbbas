@@ -10,7 +10,7 @@ Class AquaticPrime
 
 	#tag Method, Flags = &h21
 		Private Sub Constructor()
-		  
+		  // use the other one!
 		End Sub
 	#tag EndMethod
 
@@ -19,29 +19,44 @@ Class AquaticPrime
 		  
 		  #if targetMacOS or targetLinux
 		    
-		    Soft Declare Sub ERR_load_crypto_strings Lib CryptoLib ()
+		    Declare Sub ERR_load_crypto_strings Lib CryptoLib ()
 		    
 		    ERR_load_crypto_strings
 		    
-		    self.SetKey publicKey, privateKey
-		    
 		  #endif
+		  
+		  self.SetKey publicKey, privateKey
 		  
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub Destructor()
+	#tag Method, Flags = &h1
+		Protected Sub Destructor()
 		  
 		  #if targetMacOS or targetLinux
 		    
-		    Soft Declare Sub ERR_free_strings Lib CryptoLib ()
-		    Soft Declare Sub RSA_free Lib CryptoLib (r as Ptr)
+		    Declare Sub ERR_free_strings Lib CryptoLib ()
+		    Declare Sub RSA_free Lib CryptoLib (r as Ptr)
 		    
 		    ERR_free_strings
 		    
 		    if rsaKey <> nil then
 		      RSA_free(rsaKey)
+		    end if
+		    
+		  #elseif TargetWin32
+		    
+		    Declare Function CryptReleaseContext Lib advapi (hProv As Integer, dwFlags As Integer) As Boolean
+		    Declare Function CryptDestroyKey Lib advapi (hKey As Integer) As Boolean
+		    
+		    if winKeyHdl <> 0 then
+		      call CryptDestroyKey (winKeyHdl)
+		      winKeyHdl = 0
+		    end if
+		    
+		    if winCtx <> 0 then
+		      call CryptReleaseContext (winCtx, 0)
+		      winCtx = 0
 		    end if
 		    
 		  #endif
@@ -51,14 +66,15 @@ Class AquaticPrime
 
 	#tag Method, Flags = &h0
 		Function DictionaryForLicenseData(licenseData as string) As dictionary
+		  #pragma DisableBackgroundTasks // we don't want any interruptions here
 		  
 		  #if targetMacOS or targetLinux
-		    Soft Declare Function RSA_public_decrypt Lib CryptoLib (flen as integer, from as Ptr, mto as Ptr, rsa as Ptr, padding as integer) As integer
-		    Soft Declare Function ERR_error_string Lib CryptoLib (e as UInt32, buf as Ptr) As CString
-		    Soft Declare Function ERR_get_error Lib CryptoLib () As UInt32
-		    Soft Declare Function SHA1_Init Lib CryptoLib (c as Ptr) As integer
-		    Soft Declare Function SHA1_Update Lib CryptoLib (c as Ptr, data as CString, mlen as UInt32) As integer
-		    Soft Declare Function SHA1_Final Lib CryptoLib (md as Ptr, c as Ptr) As integer
+		    Declare Function RSA_public_decrypt Lib CryptoLib (flen as integer, from as Ptr, mto as Ptr, rsa as Ptr, padding as integer) As integer
+		    Declare Function ERR_error_string Lib CryptoLib (e as UInt32, buf as Ptr) As CString
+		    Declare Function ERR_get_error Lib CryptoLib () As UInt32
+		    Declare Function SHA1_Init Lib CryptoLib (c as Ptr) As integer
+		    Declare Function SHA1_Update Lib CryptoLib (c as Ptr, data as CString, mlen as UInt32) As integer
+		    Declare Function SHA1_Final Lib CryptoLib (md as Ptr, c as Ptr) As integer
 		  #endif
 		  
 		  dim x as new xmlDocument
@@ -73,30 +89,30 @@ Class AquaticPrime
 		  const kLicenseDataNotValidError = "Invalid license data"
 		  
 		  // Make sure public key is set up
-		  if rsaKey = nil or rsaKey.UInt32Value(16) = 0 then
-		    self.SetError "RSA key is invalid"
+		  if TargetWin32 and winKeyHdl = 0 or not TargetWin32 and (rsaKey = nil or rsaKey.UInt32Value(16) = 0) then
+		    _setError "RSA key is invalid"
 		    return nil
 		  end if
 		  
-		  // Traverse the XML structure and load key, value pairs in arrays
+		  // Traverse the XML structure and load key-value pairs in arrays
 		  try
 		    x.loadXml(licenseData)
 		    
 		    // Do some sanity checks on the XML
 		    if x.documentElement is nil or x.documentElement.childCount <> 1 then
-		      self.SetError kLicenseDataNotValidError
+		      _setError kLicenseDataNotValidError
 		      return nil
 		    end if
 		    
 		    topDoc = x.documentElement
 		    if topDoc.LocalName <> "plist" or topDoc.firstChild is nil or not topDoc.firstChild isA XMLElement then
-		      self.SetError kLicenseDataNotValidError
+		      _setError kLicenseDataNotValidError
 		      return nil
 		    end if
 		    
 		    dict = XMLElement(topDoc.firstChild)
 		    if dict.LocalName <> "dict" or dict.childCount = 0 then
-		      self.SetError kLicenseDataNotValidError
+		      _setError kLicenseDataNotValidError
 		      return nil
 		    end if
 		    
@@ -108,7 +124,7 @@ Class AquaticPrime
 		      end if
 		      element = XMLElement(node)
 		      if element.childCount <> 1 or not element.firstChild isA XMLTextNode then
-		        self.SetError kLicenseDataNotValidError
+		        _setError kLicenseDataNotValidError
 		        return nil
 		      end if
 		      
@@ -121,37 +137,89 @@ Class AquaticPrime
 		    loop until node is nil
 		    
 		  catch err as RuntimeException
-		    self.SetError kLicenseDataNotValidError
+		    _setError kLicenseDataNotValidError
 		    return nil
 		  end try
 		  
 		  // Get the signature
-		  dim sigBytes as new MemoryBlock(128)
-		  sigBytes.stringValue(0, 128) = DecodeBase64(valueArray(keyArray.indexOf("Signature")))
-		  
-		  // Decrypt the signature - should get 20 bytes back
-		  #if targetMacOS or targetLinux
-		    dim checkDigest as new MemoryBlock(20)
-		    if RSA_public_decrypt(128, sigBytes, checkDigest, rsaKey, RSA_PKCS1_PADDING) <> SHA_DIGEST_LENGTH then
-		      self.SetError ERR_error_string(ERR_get_error(), nil)
-		      return nil
-		    end if
-		  #endif
+		  dim sigBytes as MemoryBlock = DecodeBase64(valueArray(keyArray.indexOf("Signature")))
 		  
 		  // Remove the Signature element from arrays
 		  dim elementNumber as integer= keyArray.indexOf("Signature")
 		  keyArray.remove elementNumber
 		  valueArray.remove elementNumber
 		  
-		  // Get the license hash
+		  // Get the SHA1 hash digest from the license data and verify the signature with it
+		  dim digest as new MemoryBlock(SHA_DIGEST_LENGTH)
+		  #if targetMacOS or targetLinux
+		    
+		    // Calculate the digest
+		    dim ctx as new memoryBlock(96)
+		    call SHA1_Init(ctx)
+		    for i as integer = 0 to valueArray.Ubound
+		      call SHA1_Update(ctx, valueArray(i), lenB(valueArray(i)))
+		    next
+		    call SHA1_Final(digest, ctx)
+		    
+		    // Get the signature's hash
+		    dim sigDigest as new MemoryBlock(SHA_DIGEST_LENGTH)
+		    if RSA_public_decrypt(sigBytes.Size, sigBytes, sigDigest, rsaKey, RSA_PKCS1_PADDING) <> SHA_DIGEST_LENGTH then
+		      _setError ERR_error_string(ERR_get_error(), nil)
+		      return nil
+		    end if
+		    
+		    // Check if the signature's hash is a match
+		    if StrComp (sigDigest, digest, 0) <> 0 then
+		      return nil
+		    end if
+		    
+		  #elseif TargetWin32
+		    // On Windows, I can't find a way to retrieve the hash from the signature. All I find is a verify function that takes a hash and checks
+		    // that against the signature. Therefore, we'll now calculate the hash of the license data and let the Windows function verify
+		    // it. If it's valid, it can be used for the blacklist check just as well.
+		    
+		    Declare Function CryptCreateHash Lib advapi (hProv As Integer, Algid As Integer, hKey As Integer, dwFlags As Integer, ByRef phHash As Integer) As Boolean
+		    Declare Function CryptHashData Lib advapi (hHash As Integer, pbData As CString, dwDataLen As Integer, dwFlags As Integer) As Boolean
+		    Declare Function CryptDestroyHash Lib advapi (hHash As Integer) As Boolean
+		    Declare Function CryptGetHashParam Lib advapi (hHash As Integer, type as Integer, data as Ptr, ByRef dlen as Integer, flags as Integer) As Boolean
+		    Declare Function GetLastError Lib kernel () As Integer
+		    Declare Function CryptVerifySignature Lib advapi Alias "CryptVerifySignatureA" (hHash As Integer, pbSignature As Ptr, dwSigLen As Integer, hPubKey As Integer, sDescription As Ptr, dwFlags As Integer) As Boolean
+		    Const HP_HASHVAL = 2
+		    Const CALG_SHA1 = &h00008004
+		    Const NTE_BAD_SIGNATURE = &h80090006
+		    
+		    dim hashHdl as Integer
+		    call CryptCreateHash (winCtx, CALG_SHA1, 0, 0, hashHdl)
+		    for i as integer = 0 to valueArray.Ubound
+		      call CryptHashData (hashHdl, valueArray(i), lenB(valueArray(i)), 0)
+		    next
+		    
+		    sigBytes = _reverseData(sigBytes)
+		    
+		    if not CryptVerifySignature (hashHdl, sigBytes, sigBytes.Size, winKeyHdl, nil, 0) then
+		      dim res as Integer = GetLastError()
+		      if res = NTE_BAD_SIGNATURE then
+		        _setError "Bad signature"
+		      else
+		        _setError _errorMsgFromCode (res)
+		      end
+		      call CryptDestroyHash (hashHdl)
+		      return nil
+		    end if
+		    
+		    dim dlen as Integer = digest.Size
+		    call CryptGetHashParam (hashHdl, HP_HASHVAL, digest, dlen, 0)
+		    call CryptDestroyHash (hashHdl)
+		    
+		  #endif
+		  
+		  // Get the textual represenation of the license hash and store it in case we need it later
 		  n = SHA_DIGEST_LENGTH-1
 		  dim hashCheck as string
 		  for hashIndex as integer = 0 to n
-		    hashCheck = hashCheck + lowercase(right("0"+hex(checkDigest.byte(hashIndex)), 2))
+		    hashCheck = hashCheck + lowercase(right("0"+hex(digest.byte(hashIndex)), 2))
 		  next
-		  
-		  // Store the license hash in case we need it later
-		  self.SetHash hashCheck
+		  mHash = hashCheck
 		  
 		  // Make sure the license hash isn't on the blacklist
 		  if mblacklist.indexOf(hash) <> -1 then
@@ -160,32 +228,6 @@ Class AquaticPrime
 		  
 		  // Sort the keys so we always have a uniform order
 		  keyArray.sortWith(valueArray)
-		  
-		  // Setup up the hash context
-		  #if targetMacOS or targetLinux
-		    dim ctx as new memoryBlock(96)
-		    call SHA1_Init(ctx)
-		  #endif
-		  
-		  // Update the SHA1 stuff
-		  #if targetMacOS or targetLinux
-		    n = ubound(valueArray)
-		    for i as integer = 0 to n
-		      call SHA1_Update(ctx, valueArray(i), lenB(valueArray(i)))
-		    next
-		    dim digest as new MemoryBlock(SHA_DIGEST_LENGTH)
-		    call SHA1_Final(digest, ctx)
-		  #endif
-		  
-		  // Check if the signature is a match
-		  n = SHA_DIGEST_LENGTH-1
-		  for i as integer = 0 to n
-		    if bitwise.bitXor(checkDigest.byte(i), digest.byte(i)) <> 0 then
-		      return nil
-		    end if
-		  next
-		  
-		  // If it's a match, we return the dictionary; otherwise, we never reach this
 		  
 		  // Build a RB dictionary to return
 		  dim retDict as new dictionary
@@ -225,18 +267,20 @@ Class AquaticPrime
 
 	#tag Method, Flags = &h0
 		Function LicenseDataForDictionary(dict as dictionary) As string
-		  
 		  #if targetMacOS or targetLinux
-		    Soft Declare Function SHA1 Lib CryptoLib (d as Ptr, n as UInt32, md as Ptr) As Ptr
-		    Soft Declare Function RSA_size Lib CryptoLib (RSA as Ptr) as Integer
-		    Soft Declare Function RSA_private_encrypt Lib CryptoLib (flen as Integer, from as Ptr, mto as Ptr, rsa as Ptr, padding as integer) as integer
-		    Soft Declare Function ERR_error_string Lib CryptoLib (e as UInt32, buf as Ptr) As CString
-		    Soft Declare Function ERR_get_error Lib CryptoLib () As UInt32
+		    Declare Function SHA1 Lib CryptoLib (d as Ptr, n as UInt32, md as Ptr) As Ptr
+		    Declare Function RSA_size Lib CryptoLib (RSA as Ptr) as Integer
+		    Declare Function RSA_private_encrypt Lib CryptoLib (flen as Integer, from as Ptr, mto as Ptr, rsa as Ptr, padding as integer) as integer
+		    Declare Function ERR_error_string Lib CryptoLib (e as UInt32, buf as Ptr) As CString
+		    Declare Function ERR_get_error Lib CryptoLib () As UInt32
+		  #else
+		    // Support for other platforms, i.e. Windows, hasn't been implemented yet
+		    raise new RuntimeException
 		  #endif
 		  
 		  // Make sure we have a good key
 		  if rsaKey = nil or rsaKey.UInt32Value(16) = 0 or rsaKey.UInt32Value(24) = 0 then
-		    self.SetError "RSA key is invalid"
+		    _setError "RSA key is invalid"
 		    return ""
 		  end if
 		  
@@ -265,15 +309,17 @@ Class AquaticPrime
 		  #endif
 		  
 		  // Create the signature from 20 byte hash
+		  dim bytes as integer
+		  dim signature as memoryBlock
 		  #if targetMacOS or targetLinux
 		    dim rsaLength as integer = RSA_size(rsaKey)
-		    dim signature as new memoryBlock(rsaLength)
-		    dim bytes as integer = RSA_private_encrypt(20, digest, signature, rsaKey, RSA_PKCS1_PADDING)
+		    signature = new memoryBlock(rsaLength)
+		    bytes = RSA_private_encrypt(20, digest, signature, rsaKey, RSA_PKCS1_PADDING)
 		  #endif
 		  
 		  if bytes = -1 then
 		    #if targetMacOS or targetLinux
-		      self.SetError ERR_error_string(ERR_get_error(), nil)
+		      _setError ERR_error_string(ERR_get_error(), nil)
 		    #endif
 		    return ""
 		  end if
@@ -320,18 +366,6 @@ Class AquaticPrime
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Function MemAddress(m as memoryBlock) As UInt32
-		  
-		  dim mAddr as new memoryBlock(4)
-		  
-		  mAddr.ptr(0) = m
-		  
-		  return mAddr.UInt32Value(0)
-		  
-		End Function
-	#tag EndMethod
-
 	#tag Method, Flags = &h0
 		Sub SetBlacklist(hashArray() as string)
 		  
@@ -345,80 +379,128 @@ Class AquaticPrime
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Sub SetError(err as string)
-		  
-		  aqError = err
-		  
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Sub SetHash(hashString as string)
-		  
-		  mhash = hashString
-		  
-		End Sub
-	#tag EndMethod
-
 	#tag Method, Flags = &h0
 		Sub SetKey(key as string, privateKey as string = "")
 		  
+		  dim result as integer, ok as Boolean
+		  
+		  // Must have public modulus, private key is optional
+		  if key = "" then
+		    _setError "Empty public key parameter"
+		    return
+		  end if
+		  
 		  #if targetMacOS or targetLinux
-		    
-		    Soft Declare Sub RSA_free Lib CryptoLib (r as Ptr)
-		    Soft Declare Function RSA_new Lib CryptoLib () As Ptr
-		    Soft Declare Function BN_dec2bn Lib CryptoLib (a as UInt32, str as CString) As integer
-		    Soft Declare Function BN_hex2bn Lib CryptoLib (a as UInt32, str as CString) As integer
-		    Soft Declare Function ERR_get_error Lib CryptoLib () As UInt32
-		    Soft Declare Function ERR_error_string Lib CryptoLib (e as UInt32, buf as Ptr) As CString
-		    
-		    // Must have public modulus, private key is optional
-		    if key = "" then
-		      self.SetError "Empty public key parameter"
-		      return
-		    end if
+		    Declare Sub RSA_free Lib CryptoLib (r as Ptr)
+		    Declare Function RSA_new Lib CryptoLib () As Ptr
+		    Declare Function BN_dec2bn Lib CryptoLib (a as UInt32, str as CString) As integer
+		    Declare Function BN_hex2bn Lib CryptoLib (a as UInt32, str as CString) As integer
+		    Declare Function ERR_get_error Lib CryptoLib () As UInt32
+		    Declare Function ERR_error_string Lib CryptoLib (e as UInt32, buf as Ptr) As CString
 		    
 		    if rsaKey <> nil then
 		      RSA_free(rsaKey)
 		    end if
-		    
-		    #if targetMacOS or targetLinux
-		      rsaKey = RSA_new()
-		    #endif
+		    rsaKey = RSA_new()
 		    
 		    // We are using the constant public exponent e = 3
-		    call BN_dec2bn(MemAddress(rsaKey)+20, "3")
+		    call BN_dec2bn(_ptrToInt(rsaKey)+20, "3")
 		    
 		    // Determine if we have hex or decimal values
-		    dim result as integer
-		    
 		    if left(key, 2) = "0x" then
-		      result = BN_hex2bn(MemAddress(rsaKey)+16, mid(key, 3))
+		      result = BN_hex2bn(_ptrToInt(rsaKey)+16, mid(key, 3))
 		    else
-		      result = BN_dec2bn(MemAddress(rsaKey)+16, key)
+		      result = BN_dec2bn(_ptrToInt(rsaKey)+16, key)
 		    end if
 		    
 		    if result = 0 then
-		      self.SetError ERR_error_string(ERR_get_error(), nil)
+		      _setError ERR_error_string(ERR_get_error(), nil)
 		      return
 		    end if
 		    
 		    // Do the private portion if it exists
 		    if privateKey <> "" then
 		      if left(privateKey, 2) = "0x" then
-		        result = BN_hex2bn(MemAddress(rsaKey)+24, mid(privateKey, 3))
+		        result = BN_hex2bn(_ptrToInt(rsaKey)+24, mid(privateKey, 3))
 		      else
-		        result = BN_dec2bn(MemAddress(rsaKey)+24, privateKey)
+		        result = BN_dec2bn(_ptrToInt(rsaKey)+24, privateKey)
 		      end if
 		      
 		      if result = 0 then
-		        self.SetError ERR_error_string(ERR_get_error(), nil)
+		        _setError ERR_error_string(ERR_get_error(), nil)
 		        return
 		      end if
 		    end if
 		    
+		  #elseif TargetWin32
+		    Declare Function CryptReleaseContext Lib advapi (hProv As Integer, dwFlags As Integer) As Boolean
+		    Declare Function CryptImportKey Lib advapi (hProv As Integer, data As Ptr, dlen As Integer, pbData As Ptr, flags as Integer, ByRef keyHandleOut As Integer) As Boolean
+		    Declare Function CryptDestroyKey Lib advapi (hKey As Integer) As Boolean
+		    Declare Function GetLastError Lib kernel () As Integer
+		    Const PROV_RSA_FULL = 1
+		    Const MS_DEF_PROV = "Microsoft Base Cryptographic Provider v1.0"
+		    Const MS_ENHANCED_PROV = "Microsoft Enhanced Cryptographic Provider v1.0"
+		    Const CRYPT_VERIFYCONTEXT = &hF0000000
+		    
+		    if privateKey <> "" then
+		      // we're not supporting this (yet), because it requires a different CryptAcquireContext call and also more code in the other functions
+		      "Key generation not support on Windows"
+		      return
+		    end if
+		    
+		    if winKeyHdl <> 0 then
+		      call CryptDestroyKey (winKeyHdl)
+		      winKeyHdl = 0
+		    end if
+		    
+		    dim pubKeyData as MemoryBlock = _decodeHexDigits (key) // this is usually 128 bytes in length
+		    pubKeyData = _reverseData(pubKeyData)
+		    
+		    // set up data for CryptImportKey, see http://msdn.microsoft.com/en-us/library/aa387459(v=VS.85).aspx ("Public Key BLOBs")
+		    dim blob as new MemoryBlock (20+pubKeyData.Size) // a PUBLICKEYSTRUC, specifically a PUBLICKEYBLOB plus key data
+		    blob.UInt32Value(0) = &h00000206
+		    blob.UInt32Value(4) = &h0000A400
+		    blob.UInt32Value(8) = &h31415352 // 'RSA1'
+		    blob.UInt32Value(12) = pubKeyData.Size * 8
+		    blob.UInt32Value(16) = 3 // the public exponent
+		    blob.StringValue(20,pubKeyData.Size) = pubKeyData
+		    
+		    dim rsaContext as Integer = winCtx
+		    if rsaContext <> 0 then
+		      ok = true
+		    else
+		      #if false
+		        // This creates a new keyset as needed for for encryption:
+		        Declare Function CryptAcquireContext Lib advapi Alias "CryptAcquireContextA" (ByRef phProv As Integer, pszContainer As Ptr, pszProvider As CString, dwProvType As Integer, dwFlags As Integer) As Boolean
+		        ok = CryptAcquireContext (rsaContext, nil, MS_ENHANCED_PROV, PROV_RSA_FULL, 0)
+		        if not ok then
+		          result = GetLastError() // careful -- you won't get the right code here if you step here in the debugger, as the debugger clears this error code!
+		          if result = &h80090016 then // NTE_BAD_KEYSET
+		            ok = CryptAcquireContext (rsaContext, nil, MS_ENHANCED_PROV, PROV_RSA_FULL, 8) // create new one
+		          end if
+		        end
+		      #else
+		        // This creates a temporary keyset for verification only:
+		        Declare Function CryptAcquireContext Lib advapi Alias "CryptAcquireContextA" (ByRef phProv As Integer, pszContainer As Ptr, pszProvider As Ptr, dwProvType As Integer, dwFlags As Integer) As Boolean
+		        ok = CryptAcquireContext (rsaContext, nil, nil, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)
+		      #endif
+		    end if
+		    if not ok then
+		      _errorMsgFromLastError
+		      break
+		    else
+		      winCtx = rsaContext
+		      dim keyHdl as Integer
+		      ok = CryptImportKey (rsaContext, blob, blob.Size, nil, 0, keyHdl)
+		      if not ok then
+		        _errorMsgFromLastError
+		        break
+		      else
+		        winKeyHdl = keyHdl
+		      end
+		    end if
 		  #endif
+		  
 		End Sub
 	#tag EndMethod
 
@@ -464,6 +546,77 @@ Class AquaticPrime
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Shared Function _decodeHexDigits(hexText as String) As MemoryBlock
+		  #if TargetWin32
+		    dim startOfs as Integer
+		    if hexText.Left(2) = "0x" then
+		      startOfs = 2
+		    end
+		    dim output as new MemoryBlock((hexText.Len-startOfs)\2)
+		    for i as Integer = 1 to hexText.Len-startOfs step 2
+		      dim s as String = hexText.Mid(i+startOfs,2)
+		      output.UInt8Value((i-1)\2) = Val("&h"+s)
+		    next
+		    return output
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Shared Function _errorMsgFromCode(code as Integer) As String
+		  #if TargetWin32
+		    // for error code meanings, see: http://msdn.microsoft.com/en-us/library/cc704587(PROT.10).aspx
+		    
+		    Declare Function FormatMessage Lib kernel Alias "FormatMessageA" (dwFlags As Integer, lpSource As Integer, dwMessageId As Integer, dwLanguageId As Integer, lpBuffer As Ptr, nSize As Integer, Arguments As Ptr) As Integer
+		    const FORMAT_MESSAGE_FROM_SYSTEM = &h00001000
+		    dim msg as new MemoryBlock(1024)
+		    dim n as Integer = FormatMessage (FORMAT_MESSAGE_FROM_SYSTEM, 0, code, 0, msg, msg.Size, nil)
+		    if n = n then
+		      return "ErrorCode="+Right("0000000"+Hex(code),8)
+		    end
+		    dim s as String = msg.StringValue(0,n)
+		    return s.DefineEncoding(Encodings.SystemDefault) // Not sure about the encoding here, though! Does someone know? Please fix and update in git!
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Shared Function _errorMsgFromLastError() As String
+		  #if TargetWin32
+		    Declare Function GetLastError Lib kernel () As Integer
+		    dim code as Integer = GetLastError()
+		    return _errorMsgFromCode (code)
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Shared Function _ptrToInt(m as memoryBlock) As UInt32
+		  dim mAddr as new memoryBlock(4)
+		  mAddr.ptr(0) = m
+		  return mAddr.UInt32Value(0)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Shared Function _reverseData(mb as MemoryBlock) As MemoryBlock
+		  dim d2 as new MemoryBlock(mb.Size)
+		  for i as integer = 0 to mb.Size-1
+		    d2.Byte(mb.Size-1-i) = mb.Byte(i)
+		  next
+		  return d2
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub _setError(err as string)
+		  
+		  aqError = err
+		  
+		End Sub
+	#tag EndMethod
+
 
 	#tag Note, Name = Legal
 		
@@ -497,6 +650,12 @@ Class AquaticPrime
 		OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	#tag EndNote
 
+	#tag Note, Name = Windows support
+		While the code should be complete for use with OSX and Linux,
+		the Windows code is currently only supporting verification
+		of a signed license, but not creating new ones.
+	#tag EndNote
+
 
 	#tag Property, Flags = &h21
 		Private aqError As string
@@ -506,10 +665,10 @@ Class AquaticPrime
 		#tag Getter
 			Get
 			  
-			  return mhash
+			  return mHash
 			End Get
 		#tag EndGetter
-		hash As string
+		Hash As string
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -518,13 +677,13 @@ Class AquaticPrime
 			  
 			  #if targetMacOS
 			    
-			    Soft Declare Function BN_bn2hex Lib CryptoLib (a as UInt32) As CString
+			    Declare Function BN_bn2hex Lib CryptoLib (a as UInt32) As CString
 			    
 			    if rsaKey = nil or rsaKey.UInt32Value(16) = 0 then
 			      return ""
 			    end if
 			    
-			    return BN_bn2hex(MemAddress(rsaKey)+16)
+			    return BN_bn2hex(_ptrToInt(rsaKey)+16)
 			    
 			  #endif
 			End Get
@@ -548,7 +707,7 @@ Class AquaticPrime
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mhash As string
+		Private mHash As string
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -557,13 +716,13 @@ Class AquaticPrime
 			  
 			  #if targetMacOS
 			    
-			    Soft Declare Function BN_bn2hex Lib CryptoLib (a as UInt32) As CString
+			    Declare Function BN_bn2hex Lib CryptoLib (a as UInt32) As CString
 			    
 			    if rsaKey = nil or rsaKey.UInt32Value(24) = 0 then
 			      return ""
 			    end if
 			    
-			    return BN_bn2hex(MemAddress(rsaKey)+24)
+			    return BN_bn2hex(_ptrToInt(rsaKey)+24)
 			    
 			  #endif
 			End Get
@@ -575,10 +734,24 @@ Class AquaticPrime
 		Private rsaKey As memoryBlock
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private winCtx As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private winKeyHdl As Integer
+	#tag EndProperty
+
+
+	#tag Constant, Name = advapi, Type = String, Dynamic = False, Default = \"advapi32.dll", Scope = Private
+	#tag EndConstant
 
 	#tag Constant, Name = CryptoLib, Type = String, Dynamic = False, Default = \"libcrypto.dylib", Scope = Private
 		#Tag Instance, Platform = Mac OS, Language = Default, Definition  = \"libcrypto.dylib"
 		#Tag Instance, Platform = Linux, Language = Default, Definition  = \"libcrypto"
+	#tag EndConstant
+
+	#tag Constant, Name = kernel, Type = String, Dynamic = False, Default = \"kernel32.dll", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = RSA_PKCS1_PADDING, Type = Double, Dynamic = False, Default = \"1", Scope = Private
