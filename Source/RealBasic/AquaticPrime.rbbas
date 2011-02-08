@@ -450,7 +450,7 @@ Class AquaticPrime
 		    
 		    if privateKey <> "" then
 		      // we're not supporting this (yet), because it requires a different CryptAcquireContext call and also more code in the other functions
-		      "Key generation not support on Windows"
+		      _setError "Key generation not support on Windows"
 		      return
 		    end if
 		    
@@ -492,14 +492,14 @@ Class AquaticPrime
 		      #endif
 		    end if
 		    if not ok then
-		      _errorMsgFromLastError
+		      _setError _errorMsgFromLastError
 		      break
 		    else
 		      winCtx = rsaContext
 		      dim keyHdl as Integer
 		      ok = CryptImportKey (rsaContext, blob, blob.Size, nil, 0, keyHdl)
 		      if not ok then
-		        _errorMsgFromLastError
+		        _setError _errorMsgFromLastError
 		        break
 		      else
 		        winKeyHdl = keyHdl
