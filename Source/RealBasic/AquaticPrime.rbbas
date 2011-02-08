@@ -85,6 +85,7 @@ Class AquaticPrime
 		  dim node as XMLNode
 		  dim element as XMLElement
 		  dim n as integer
+		  dim sigBytes as MemoryBlock
 		  
 		  const kLicenseDataNotValidError = "Invalid license data"
 		  
@@ -136,18 +137,27 @@ Class AquaticPrime
 		      node = element.nextSibling
 		    loop until node is nil
 		    
+		    // Get the signature
+		    sigBytes = DecodeBase64(valueArray(keyArray.indexOf("Signature")))
+		    
+		    // Remove the Signature element from arrays
+		    dim elementNumber as integer= keyArray.indexOf("Signature")
+		    keyArray.remove elementNumber
+		    valueArray.remove elementNumber
+		    
+		    // Sort the keys because that's important for the SHA1 calculation
+		    //
+		    // Ideally, this should use the same ordering that the Cocoa and CF
+		    // sources use (i.e. "case insensitive", but it's not clear which chars
+		    // are considered for this case test - all letters of all encodings and
+		    // scripts, or only ASCII?)
+		    //
+		    keyArray.sortWith(valueArray)
+		    
 		  catch err as RuntimeException
 		    _setError kLicenseDataNotValidError
 		    return nil
 		  end try
-		  
-		  // Get the signature
-		  dim sigBytes as MemoryBlock = DecodeBase64(valueArray(keyArray.indexOf("Signature")))
-		  
-		  // Remove the Signature element from arrays
-		  dim elementNumber as integer= keyArray.indexOf("Signature")
-		  keyArray.remove elementNumber
-		  valueArray.remove elementNumber
 		  
 		  // Get the SHA1 hash digest from the license data and verify the signature with it
 		  dim digest as new MemoryBlock(SHA_DIGEST_LENGTH)
@@ -222,17 +232,13 @@ Class AquaticPrime
 		  mHash = hashCheck
 		  
 		  // Make sure the license hash isn't on the blacklist
-		  if mblacklist.indexOf(hash) <> -1 then
+		  if mblacklist.indexOf(hash) >= 0 then
 		    return nil
 		  end if
 		  
-		  // Sort the keys so we always have a uniform order
-		  keyArray.sortWith(valueArray)
-		  
 		  // Build a RB dictionary to return
 		  dim retDict as new dictionary
-		  n = ubound(keyArray)
-		  for i as integer = 0 to n
+		  for i as integer = 0 to keyArray.Ubound
 		    retDict.value(keyArray(i)) = valueArray(i)
 		  next
 		  
