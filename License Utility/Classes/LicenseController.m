@@ -116,10 +116,11 @@
 - (void)saveLicenseTemplate:(id)anObject
 {	
 	// Make sure the object is a tableView
-	int index;
+	int index = -1;
 	if ([anObject respondsToSelector:@selector(object)] && [[anObject object] respondsToSelector:@selector(selectedRow)])
 		index = [[anObject object] selectedRow];
-	else
+
+	if (index < 0)
 		return;
 	
 	NSFileManager *fm = [NSFileManager defaultManager];
@@ -168,8 +169,8 @@
 	
 	NSFileManager *fm = [NSFileManager defaultManager];
 	NSString *supportDir = [@"~/Library/Application Support/Aquatic" stringByExpandingTildeInPath];
-	NSString *templateDir = [supportDir stringByAppendingString:@"/License Templates"];
-	NSString *productPath = [templateDir stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", [productController currentProduct]]];
+	NSString *templateDir = [supportDir stringByAppendingPathComponent:@"License Templates"];
+	NSString *productPath = [[templateDir stringByAppendingPathComponent:[productController currentProduct]] stringByAppendingPathExtension:@"plist"];
 
 	if (![fm fileExistsAtPath:productPath])
 	{
