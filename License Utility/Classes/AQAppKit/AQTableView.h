@@ -30,7 +30,10 @@
 {
 }
 
-// Delegate method
 - (void)deleteItemAtIndex:(int)index;
-	
+
+@end
+
+@protocol AQTableViewDelegate
+- (void)deleteItemAtIndex:(int)index;
 @end

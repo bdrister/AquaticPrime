@@ -141,8 +141,8 @@
 	NSString *oldKeyProductPath = [[@"~/Library/Application Support/Aquatic/Product Keys" stringByExpandingTildeInPath] stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", oldProduct]];
 	NSString *newKeyProductPath = [[@"~/Library/Application Support/Aquatic/Product Keys" stringByExpandingTildeInPath] stringByAppendingString:[NSString stringWithFormat:@"/%@%@.plist", oldProduct, copy]];
 
-	[fm copyPath:oldTemplateProductPath toPath:newTemplateProductPath handler:nil];
-	[fm copyPath:oldKeyProductPath toPath:newKeyProductPath handler:nil];
+	[fm copyItemAtPath:oldTemplateProductPath toPath:newTemplateProductPath error:nil];
+	[fm copyItemAtPath:oldKeyProductPath toPath:newKeyProductPath error:nil];
 	
 	[productArray addObject:[oldProduct stringByAppendingString:copy]];
 	[productArray sortUsingSelector:@selector(caseInsensitiveCompare:)];
@@ -229,8 +229,8 @@
 						@"This cannot be undone.", @"OK", @"Cancel", nil) == NSAlertAlternateReturn)
 		return;
 	
-	[fm removeFileAtPath:[supportDir stringByAppendingString:[NSString stringWithFormat:@"/Product Keys/%@.plist", product]] handler:nil];
-	[fm removeFileAtPath:[supportDir stringByAppendingString:[NSString stringWithFormat:@"/License Templates/%@.plist", product]] handler:nil];
+	[fm removeItemAtPath:[supportDir stringByAppendingString:[NSString stringWithFormat:@"/Product Keys/%@.plist", product]] error:nil];
+	[fm removeItemAtPath:[supportDir stringByAppendingString:[NSString stringWithFormat:@"/License Templates/%@.plist", product]] error:nil];
 	[productArray removeObjectAtIndex:index];
 		
 	[productTable reloadData];
@@ -279,8 +279,8 @@
 	NSString *newTemplateProductPath = [[@"~/Library/Application Support/Aquatic/License Templates" stringByExpandingTildeInPath] 
 										stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", object]];
 							
-	[fm movePath:oldProductPath toPath:newProductPath handler:nil];
-	[fm movePath:oldTemplateProductPath toPath:newTemplateProductPath handler:nil];
+	[fm moveItemAtPath:oldProductPath toPath:newProductPath error:nil];
+	[fm moveItemAtPath:oldTemplateProductPath toPath:newTemplateProductPath error:nil];
 	
 	// Change the name
 	[productArray replaceObjectAtIndex:row withObject:object];

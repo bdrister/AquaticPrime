@@ -30,20 +30,26 @@
 
 - (void)keyDown:(NSEvent *)event
 { 
-    unichar key = [[event charactersIgnoringModifiers] characterAtIndex:0];
-	
-    if ( (key == NSDeleteCharacter || key == NSDeleteFunctionKey) &&
-		 ([self numberOfRows] > 0) && ([self selectedRow] != -1) )
+	unichar key = [[event charactersIgnoringModifiers] characterAtIndex:0];
+
+	id delegate = [self delegate];
+
+	if ( (key == NSDeleteCharacter || key == NSDeleteFunctionKey) &&
+		 ([self numberOfRows] > 0) && ([self selectedRow] != -1) &&
+		 [delegate respondsToSelector:@selector(deleteItemAtIndex:)])
 	{
-        [self deleteItemAtIndex:[self selectedRow]];
-    } else {
-        [super keyDown:event];
-    }
+		[delegate deleteItemAtIndex:[self selectedRow]];
+	} else {
+		[super keyDown:event];
+	}
 }
 
-- (void)deleteItemAtIndex:(int)row
+- (void)deleteItemAtIndex:(int)index
 {
-	[[self delegate] deleteItemAtIndex:row];
+	id delegate = [self delegate];
+	if ([delegate respondsToSelector:@selector(deleteItemAtIndex:)]) {
+		[delegate deleteItemAtIndex:[self selectedRow]];
+	}
 }
 
 @end

@@ -35,7 +35,7 @@ static void _linearColorReleaseInfoFunction(void *info)
     free(info);
 }
 
-static const CGFunctionCallbacks linearFunctionCallbacks = {0, &_linearColorBlendFunction, &_linearColorReleaseInfoFunction};
+static const CGFunctionCallbacks linearFunctionCallbacks = {0, _linearColorBlendFunction, _linearColorReleaseInfoFunction};
 
 /*
     End CoreGraphics gradient helpers

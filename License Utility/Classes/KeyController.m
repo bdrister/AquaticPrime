@@ -210,7 +210,7 @@ static KeyController *sharedInstance = nil;
 		if (NSRunInformationalAlertPanel(warningString, @"The old product key will be erased.", @"OK", @"Cancel", nil) == NSAlertAlternateReturn)
 			return;
 		else
-			[fm movePath:productPath toPath:[productPath stringByAppendingString:@".old"] handler:nil];
+			[fm moveItemAtPath:productPath toPath:[productPath stringByAppendingString:@".old"] error:nil];
 	}
 	
 	if (rsaKey)
@@ -290,7 +290,7 @@ static KeyController *sharedInstance = nil;
 	if (![fm fileExistsAtPath:supportDir isDirectory:&isDir])
 	{
 		// Create the ~/Library/Application Support/Aquatic/ directory
-		[fm createDirectoryAtPath:supportDir attributes:nil];
+		[fm createDirectoryAtPath:supportDir withIntermediateDirectories:YES attributes:nil error:nil];
 	}
 	// The support path leads to a file! Bad!
 	else if (!isDir)
@@ -303,7 +303,7 @@ static KeyController *sharedInstance = nil;
 	if  (![fm fileExistsAtPath:keyDir isDirectory:&isDir])
 	{
 		// Create the product key directory
-		[fm createDirectoryAtPath:keyDir attributes:nil];
+		[fm createDirectoryAtPath:keyDir withIntermediateDirectories:YES attributes:nil error:nil];
 	}
 	// The key directory path leads to a file! Bad again!
 	else if (!isDir)
@@ -331,7 +331,7 @@ static KeyController *sharedInstance = nil;
 	NSString *productPath = [[NSString stringWithFormat:@"~/Library/Application Support/Aquatic/Product Keys/%@.plist", 
 															[productController currentProduct]] stringByExpandingTildeInPath];
 																																
-	[fm copyPath:productPath toPath:exportPath handler:nil];
+	[fm copyItemAtPath:productPath toPath:exportPath error:nil];
 }
 
 - (IBAction)importKeys:(id)sender
@@ -358,7 +358,7 @@ static KeyController *sharedInstance = nil;
 	NSString *productPath = [[NSString stringWithFormat:@"~/Library/Application Support/Aquatic/Product Keys/%@.plist", 
 															[keyPath lastPathComponent]] stringByExpandingTildeInPath];
 																																
-	[fm copyPath:keyPath toPath:productPath handler:nil];
+	[fm copyItemAtPath:keyPath toPath:productPath error:nil];
 	[productController loadProducts];
 }
 

@@ -77,10 +77,10 @@
 	{
 		// The support path leads to a file! Bad! This shouldn't happen ever!!
 		if (!isDir)
-			[fm removeFileAtPath:supportDir handler:nil];
+			[fm removeItemAtPath:supportDir error:nil];
 		
 		// Create the ~/Library/Application Support/Aquatic/ directory
-		[fm createDirectoryAtPath:supportDir attributes:nil];
+		[fm createDirectoryAtPath:supportDir withIntermediateDirectories:YES attributes:nil error:nil];
 	}
 
 	// The ~/Library/Application Support/Aquatic/Generated Licenses folder doesn't exist yet
@@ -88,10 +88,10 @@
 	{
 		// The licenses path leads to a file! Bad! This shouldn't happen ever!!
 		if (!isDir)
-			[fm removeFileAtPath:licenseDir handler:nil];
+			[fm removeItemAtPath:licenseDir error:nil];
 			
 		// Create the product key directory
-		[fm createDirectoryAtPath:licenseDir attributes:nil];
+		[fm createDirectoryAtPath:licenseDir withIntermediateDirectories:YES attributes:nil error:nil];
 	}
 	
 	NSMutableDictionary *licenseDict = [NSMutableDictionary dictionaryWithObjects:valueArray forKeys:keyArray];
@@ -139,10 +139,10 @@
 	{
 		// The support path leads to a file! Bad! This shouldn't happen ever!!
 		if (!isDir)
-			[fm removeFileAtPath:supportDir handler:nil];
+			[fm removeItemAtPath:supportDir error:nil];
 		
 		// Create the ~/Library/Application Support/Aquatic/ directory
-		[fm createDirectoryAtPath:supportDir attributes:nil];
+		[fm createDirectoryAtPath:supportDir withIntermediateDirectories:YES attributes:nil error:nil];
 	}
 	
 	// The ~/Library/Application Support/Aquatic/License Templates folder doesn't exist yet
@@ -150,10 +150,10 @@
 	{
 		// The template path leads to a file! Bad! This shouldn't happen ever!!
 		if (!isDir)
-			[fm removeFileAtPath:templateDir handler:nil];
+			[fm removeItemAtPath:templateDir error:nil];
 			
 		// Create the product key directory
-		[fm createDirectoryAtPath:templateDir attributes:nil];
+		[fm createDirectoryAtPath:templateDir withIntermediateDirectories:YES attributes:nil error:nil];
 	}
 	
 	[templateDict writeToFile:productPath atomically:YES];
@@ -287,7 +287,7 @@
 		[keyValueTable deleteItemAtIndex:[keyValueTable selectedRow]];
 }
 
-#pragma mark TableView Delegate Methods
+#pragma mark AQTableView Delegate Methods
 
 - (void)deleteItemAtIndex:(int)row
 {
@@ -295,15 +295,15 @@
 	[valueArray removeObjectAtIndex:row];
 	
 	// Make sure we don't lose a reference to the arrays
-	if (![keyArray count])
+	if ([keyArray count] == 0)
 		[keyArray retain];
-	if (![valueArray count])
+	if ([valueArray count] == 0)
 		[valueArray retain];
 	
 	[keyValueTable reloadData];
 	[keyValueTable selectRowIndexes:[NSIndexSet indexSetWithIndex:row-1] byExtendingSelection:NO];
 	
-	if (![keyArray count])
+	if ([keyArray count] == 0)
 		[generateLicenseButton setEnabled:NO];
 }
 

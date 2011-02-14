@@ -57,8 +57,9 @@
 {
 }
 
-- (void)draggingEntered:(id <NSDraggingInfo>)sender
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
+	return NSDragOperationNone;
 }
 
 - (void)draggingExited:(id <NSDraggingInfo>)sender
@@ -110,9 +111,9 @@
 		NSString *currentProduct = [productArray objectAtIndex:productIndex];
 		NSData *publicKey = [productKeyDictionary objectForKey:currentProduct];
 		NSMutableString *publicKeyString = [NSMutableString stringWithString:[publicKey description]];
-		[publicKeyString replaceOccurrencesOfString:@" " withString:@"" options:nil range:NSMakeRange(0, [publicKeyString length])];
-		[publicKeyString replaceOccurrencesOfString:@"<" withString:@"" options:nil range:NSMakeRange(0, [publicKeyString length])];
-		[publicKeyString replaceOccurrencesOfString:@">" withString:@"" options:nil range:NSMakeRange(0, [publicKeyString length])];
+		[publicKeyString replaceOccurrencesOfString:@" " withString:@"" options:0 range:NSMakeRange(0, [publicKeyString length])];
+		[publicKeyString replaceOccurrencesOfString:@"<" withString:@"" options:0 range:NSMakeRange(0, [publicKeyString length])];
+		[publicKeyString replaceOccurrencesOfString:@">" withString:@"" options:0 range:NSMakeRange(0, [publicKeyString length])];
 		
 		AquaticPrime *licenseChecker = [AquaticPrime aquaticPrimeWithKey:[NSString stringWithFormat:@"0x%@", publicKeyString]];
 		licenseDictionary = [licenseChecker dictionaryForLicenseFile:licensePath];
