@@ -2,7 +2,7 @@
 // AQTableView.m
 // AquaticPrime Developer
 //
-// Copyright (c) 2005, Lucas Newman
+// Copyright (c) 2005-2011, Lucas Newman and other contributors
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -48,7 +48,7 @@
 {
 	id delegate = [self delegate];
 	if ([delegate respondsToSelector:@selector(deleteItemAtIndex:)]) {
-		[delegate deleteItemAtIndex:[self selectedRow]];
+		[delegate deleteItemAtIndex:index];
 	}
 }
 
