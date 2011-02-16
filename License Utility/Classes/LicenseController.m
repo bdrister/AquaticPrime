@@ -2,7 +2,7 @@
 // LicenseController.m
 // AquaticPrime Developer
 //
-// Copyright (c) 2005, Lucas Newman
+// Copyright (c) 2005-2011, Lucas Newman and other contributors
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -37,13 +37,16 @@
 
 - (id)init
 {
-	keyArray = [[NSMutableArray array] retain];
-	valueArray = [[NSMutableArray array] retain];
+	self = [super init];
+	if(self) {
+		keyArray = [[NSMutableArray array] retain];
+		valueArray = [[NSMutableArray array] retain];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newProductSelected) name:@"ProductSelected" object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveLicenseTemplate:) name:@"ProductWillBeSelected" object:nil];
+	}
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newProductSelected) name:@"ProductSelected" object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveLicenseTemplate:) name:@"ProductWillBeSelected" object:nil];
-
-	return [super init];
+	return self;
 }
  
 - (void)dealloc
@@ -77,10 +80,10 @@
 	{
 		// The support path leads to a file! Bad! This shouldn't happen ever!!
 		if (!isDir)
-			[fm removeItemAtPath:supportDir error:nil];
+			[fm removeItemAtPath:supportDir error:NULL];
 		
 		// Create the ~/Library/Application Support/Aquatic/ directory
-		[fm createDirectoryAtPath:supportDir withIntermediateDirectories:YES attributes:nil error:nil];
+		[fm createDirectoryAtPath:supportDir withIntermediateDirectories:YES attributes:nil error:NULL];
 	}
 
 	// The ~/Library/Application Support/Aquatic/Generated Licenses folder doesn't exist yet
@@ -88,10 +91,10 @@
 	{
 		// The licenses path leads to a file! Bad! This shouldn't happen ever!!
 		if (!isDir)
-			[fm removeItemAtPath:licenseDir error:nil];
+			[fm removeItemAtPath:licenseDir error:NULL];
 			
 		// Create the product key directory
-		[fm createDirectoryAtPath:licenseDir withIntermediateDirectories:YES attributes:nil error:nil];
+		[fm createDirectoryAtPath:licenseDir withIntermediateDirectories:YES attributes:nil error:NULL];
 	}
 	
 	NSMutableDictionary *licenseDict = [NSMutableDictionary dictionaryWithObjects:valueArray forKeys:keyArray];
@@ -140,10 +143,10 @@
 	{
 		// The support path leads to a file! Bad! This shouldn't happen ever!!
 		if (!isDir)
-			[fm removeItemAtPath:supportDir error:nil];
+			[fm removeItemAtPath:supportDir error:NULL];
 		
 		// Create the ~/Library/Application Support/Aquatic/ directory
-		[fm createDirectoryAtPath:supportDir withIntermediateDirectories:YES attributes:nil error:nil];
+		[fm createDirectoryAtPath:supportDir withIntermediateDirectories:YES attributes:nil error:NULL];
 	}
 	
 	// The ~/Library/Application Support/Aquatic/License Templates folder doesn't exist yet
@@ -151,10 +154,10 @@
 	{
 		// The template path leads to a file! Bad! This shouldn't happen ever!!
 		if (!isDir)
-			[fm removeItemAtPath:templateDir error:nil];
+			[fm removeItemAtPath:templateDir error:NULL];
 			
 		// Create the product key directory
-		[fm createDirectoryAtPath:templateDir withIntermediateDirectories:YES attributes:nil error:nil];
+		[fm createDirectoryAtPath:templateDir withIntermediateDirectories:YES attributes:nil error:NULL];
 	}
 	
 	[templateDict writeToFile:productPath atomically:YES];

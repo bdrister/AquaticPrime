@@ -2,7 +2,7 @@
 // KeyController.m
 // AquaticPrime Developer
 //
-// Copyright (c) 2005, Lucas Newman
+// Copyright (c) 2005-2011, Lucas Newman and other contributors
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -40,9 +40,8 @@ static KeyController *sharedInstance = nil;
         [self dealloc];
     } else {
         sharedInstance = [super init];
+		[[NSNotificationCenter defaultCenter] addObserver:sharedInstance selector:@selector(viewKeysForCurrentProduct) name:@"ProductSelected" object:nil];
     }
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewKeysForCurrentProduct) name:@"ProductSelected" object:nil];
 	
 	return sharedInstance;
 }
@@ -210,7 +209,7 @@ static KeyController *sharedInstance = nil;
 		if (NSRunInformationalAlertPanel(warningString, @"The old product key will be erased.", @"OK", @"Cancel", nil) == NSAlertAlternateReturn)
 			return;
 		else
-			[fm moveItemAtPath:productPath toPath:[productPath stringByAppendingString:@".old"] error:nil];
+			[fm moveItemAtPath:productPath toPath:[productPath stringByAppendingString:@".old"] error:NULL];
 	}
 	
 	if (rsaKey)
@@ -290,7 +289,7 @@ static KeyController *sharedInstance = nil;
 	if (![fm fileExistsAtPath:supportDir isDirectory:&isDir])
 	{
 		// Create the ~/Library/Application Support/Aquatic/ directory
-		[fm createDirectoryAtPath:supportDir withIntermediateDirectories:YES attributes:nil error:nil];
+		[fm createDirectoryAtPath:supportDir withIntermediateDirectories:YES attributes:nil error:NULL];
 	}
 	// The support path leads to a file! Bad!
 	else if (!isDir)
@@ -303,7 +302,7 @@ static KeyController *sharedInstance = nil;
 	if  (![fm fileExistsAtPath:keyDir isDirectory:&isDir])
 	{
 		// Create the product key directory
-		[fm createDirectoryAtPath:keyDir withIntermediateDirectories:YES attributes:nil error:nil];
+		[fm createDirectoryAtPath:keyDir withIntermediateDirectories:YES attributes:nil error:NULL];
 	}
 	// The key directory path leads to a file! Bad again!
 	else if (!isDir)
@@ -331,7 +330,7 @@ static KeyController *sharedInstance = nil;
 	NSString *productPath = [[NSString stringWithFormat:@"~/Library/Application Support/Aquatic/Product Keys/%@.plist", 
 															[productController currentProduct]] stringByExpandingTildeInPath];
 																																
-	[fm copyItemAtPath:productPath toPath:exportPath error:nil];
+	[fm copyItemAtPath:productPath toPath:exportPath error:NULL];
 }
 
 - (IBAction)importKeys:(id)sender
@@ -358,7 +357,7 @@ static KeyController *sharedInstance = nil;
 	NSString *productPath = [[NSString stringWithFormat:@"~/Library/Application Support/Aquatic/Product Keys/%@.plist", 
 															[keyPath lastPathComponent]] stringByExpandingTildeInPath];
 																																
-	[fm copyItemAtPath:keyPath toPath:productPath error:nil];
+	[fm copyItemAtPath:keyPath toPath:productPath error:NULL];
 	[productController loadProducts];
 }
 
