@@ -149,9 +149,9 @@ static KeyController *sharedInstance = nil;
 	int curPos = 0;
 	
 	NSMutableString *pubConstruct = [NSMutableString stringWithString:@"\n\t// This string is specially constructed to prevent key replacement \
-	// *** Begin Public Key ***\n\tNSMutableString *key = [NSMutableString string];\n"];
-	
-	while ((lengthLeft - WINDOW_THRESH) > 0) {
+                                     // *** Begin Public Key ***\n\tCFMutableStringRef key = CFStringCreateMutable(NULL, 0);\n"];
+    
+    while ((lengthLeft - WINDOW_THRESH) > 0) {
 		// Logic to check for repeats
 		int repeated = 0;
 		char charBuf = 0;
@@ -160,12 +160,12 @@ static KeyController *sharedInstance = nil;
 			// We have a repeat!
 			if (charBuf == [pubKey characterAtIndex:i]) {
 				// Print up to repeat
-				[pubConstruct appendString:[NSString stringWithFormat:@"\t[key appendString:@\"%@\"];\n", [pubKey substringWithRange:NSMakeRange(curPos, (i-1) - curPos)]]];
+				[pubConstruct appendString:[NSString stringWithFormat:@"\tCFStringAppend(key, CFSTR(\"%@\"));\n", [pubKey substringWithRange:NSMakeRange(curPos, (i-1) - curPos)]]];
 				//Do the repeat
-				[pubConstruct appendString:[NSString stringWithFormat:@"\t[key appendString:@\"%@\"];\n", [pubKey substringWithRange:NSMakeRange(i-1, 1)]]];
-				[pubConstruct appendString:[NSString stringWithFormat:@"\t[key appendString:@\"%@\"];\n", [pubKey substringWithRange:NSMakeRange(i, 1)]]];
+				[pubConstruct appendString:[NSString stringWithFormat:@"\tCFStringAppend(key, CFSTR(\"%@\"));\n", [pubKey substringWithRange:NSMakeRange(i-1, 1)]]];
+				[pubConstruct appendString:[NSString stringWithFormat:@"\tCFStringAppend(key, CFSTR(\"%@\"));\n", [pubKey substringWithRange:NSMakeRange(i, 1)]]];
 				// Finish the line
-				[pubConstruct appendString:[NSString stringWithFormat:@"\t[key appendString:@\"%@\"];\n", [pubKey substringWithRange:NSMakeRange(i+1, (WINDOW_THRESH + curPos) - (i+1))]]];
+				[pubConstruct appendString:[NSString stringWithFormat:@"\tCFStringAppend(key, CFSTR(\"%@\"));\n", [pubKey substringWithRange:NSMakeRange(i+1, (WINDOW_THRESH + curPos) - (i+1))]]];
 				repeated = 1;
 				break;
 			}
@@ -173,12 +173,12 @@ static KeyController *sharedInstance = nil;
 		}
 		// No repeats
 		if (!repeated)
-			[pubConstruct appendString:[NSString stringWithFormat:@"\t[key appendString:@\"%@\"];\n", [pubKey substringWithRange:NSMakeRange(curPos, WINDOW_THRESH)]]];
+			[pubConstruct appendString:[NSString stringWithFormat:@"\tCFStringAppend(key, CFSTR(\"%@\"));\n", [pubKey substringWithRange:NSMakeRange(curPos, WINDOW_THRESH)]]];
 		
 		lengthLeft -= WINDOW_THRESH;
 		curPos += WINDOW_THRESH;
 	}
-	[pubConstruct appendString:[NSString stringWithFormat:@"\t[key appendString:@\"%@\"];\n\t// *** End Public Key *** \n", [pubKey substringWithRange:NSMakeRange(curPos, lengthLeft)]]];
+	[pubConstruct appendString:[NSString stringWithFormat:@"\tCFStringAppend(key, CFSTR(\"%@\"));\n\t// *** End Public Key *** \n", [pubKey substringWithRange:NSMakeRange(curPos, lengthLeft)]]];
 	
 	// Populate key view
 	[rsaKeyView setString:pubConstruct];
