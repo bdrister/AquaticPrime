@@ -75,7 +75,7 @@
 
 - (void)loadProducts
 {
-	NSString *keyDir = [@"~/Library/Application Support/Aquatic/Product Keys" stringByExpandingTildeInPath];
+	NSString *keyDir = [DATADIR_PATH stringByAppendingPathComponent:@"Product Keys"];
 	NSString *curPath;
 	NSMutableArray *possibleproductArray = [NSMutableArray array];
 	NSDirectoryEnumerator *pathEnum = [[NSFileManager defaultManager] enumeratorAtPath:keyDir];
@@ -139,11 +139,13 @@
 	int i = 1;
 	while ([productArray containsObject:[oldProduct stringByAppendingString:copy]])
 		copy = [NSString stringWithFormat:@" Copy %i", i++];
-		
-	NSString *oldTemplateProductPath = [[@"~/Library/Application Support/Aquatic/License Templates" stringByExpandingTildeInPath] stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", oldProduct]];
-	NSString *newTemplateProductPath = [[@"~/Library/Application Support/Aquatic/License Templates" stringByExpandingTildeInPath] stringByAppendingString:[NSString stringWithFormat:@"/%@%@.plist", oldProduct, copy]];
-	NSString *oldKeyProductPath = [[@"~/Library/Application Support/Aquatic/Product Keys" stringByExpandingTildeInPath] stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", oldProduct]];
-	NSString *newKeyProductPath = [[@"~/Library/Application Support/Aquatic/Product Keys" stringByExpandingTildeInPath] stringByAppendingString:[NSString stringWithFormat:@"/%@%@.plist", oldProduct, copy]];
+	
+	NSString *templateDir = [DATADIR_PATH stringByAppendingPathComponent:@"License Templates"];
+	NSString *oldTemplateProductPath = [templateDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.plist", oldProduct]];
+	NSString *newTemplateProductPath = [templateDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%@.plist", oldProduct, copy]];
+	NSString *keyDir = [DATADIR_PATH stringByAppendingPathComponent:@"Product Keys"];
+	NSString *oldKeyProductPath = [keyDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.plist", oldProduct]];
+	NSString *newKeyProductPath = [keyDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@%@.plist", oldProduct, copy]];
 
 	[fm copyItemAtPath:oldTemplateProductPath toPath:newTemplateProductPath error:NULL];
 	[fm copyItemAtPath:oldKeyProductPath toPath:newKeyProductPath error:NULL];
@@ -226,7 +228,7 @@
 - (void)deleteItemAtIndex:(int)index
 {
 	NSFileManager *fm = [NSFileManager defaultManager];
-	NSString *supportDir = [@"~/Library/Application Support/Aquatic" stringByExpandingTildeInPath];
+	NSString *supportDir = DATADIR_PATH;
 	NSString *product = [self productAtIndex:index];
 	
 	if (NSRunAlertPanel([NSString stringWithFormat:@"Are you sure you want to delete %@?", product],
@@ -271,17 +273,14 @@
 	
 	// Move the keys to the new path
 	NSFileManager *fm = [NSFileManager defaultManager];
-	NSString *oldProductPath = [[@"~/Library/Application Support/Aquatic/Product Keys" stringByExpandingTildeInPath] 
-							stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", [productArray objectAtIndex:row]]];
+	NSString *keyDir = [DATADIR_PATH stringByAppendingPathComponent:@"Product Keys"];
+	NSString *oldProductPath = [keyDir stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", [productArray objectAtIndex:row]]];
 
-	NSString *newProductPath = [[@"~/Library/Application Support/Aquatic/Product Keys" stringByExpandingTildeInPath] 
-							stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", object]];
+	NSString *newProductPath = [keyDir stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", object]];
 	
-	NSString *oldTemplateProductPath = [[@"~/Library/Application Support/Aquatic/License Templates" stringByExpandingTildeInPath] 
-										stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", [productArray objectAtIndex:row]]];
+	NSString *oldTemplateProductPath = [keyDir stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", [productArray objectAtIndex:row]]];
 
-	NSString *newTemplateProductPath = [[@"~/Library/Application Support/Aquatic/License Templates" stringByExpandingTildeInPath] 
-										stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", object]];
+	NSString *newTemplateProductPath = [keyDir stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", object]];
 							
 	[fm moveItemAtPath:oldProductPath toPath:newProductPath error:NULL];
 	[fm moveItemAtPath:oldTemplateProductPath toPath:newTemplateProductPath error:NULL];
