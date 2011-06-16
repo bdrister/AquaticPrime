@@ -4,6 +4,13 @@
 
 @implementation MainController
 
+- (void)applicationWillFinishLaunching:(NSNotification *)notification
+{
+	NSDictionary *dict = [NSDictionary dictionaryWithObject:@"~/Library/Application Support/Aquatic" 
+													 forKey:DATADIR_DEFAULTS_KEY];
+	[[NSUserDefaults standardUserDefaults] registerDefaults:dict];
+}
+
 - (void)awakeFromNib
 {
 	[mainWindow makeKeyAndOrderFront:self];
@@ -42,6 +49,14 @@
 	[[NSApp keyWindow] orderOut:self];
 }
 
+- (IBAction)showPreferences:(id)sender
+{
+	if (nil == self.prefsWindow) {
+		[NSBundle loadNibNamed:@"Preferences" owner:self];
+	}
+	[self.prefsWindow makeKeyAndOrderFront:sender];
+}
+
 - (BOOL)validateMenuItem:(NSMenuItem *)aMenuItem
 {
 	if ([[aMenuItem title] isEqualToString:@"Close"]) {
@@ -52,4 +67,5 @@
 	return YES;
 }
 
+@synthesize prefsWindow;
 @end
