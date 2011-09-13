@@ -71,22 +71,22 @@
 	}
 	
 	NSFileManager *fm = [NSFileManager defaultManager];
-	NSString *supportDir = [@"~/Library/Application Support/Aquatic" stringByExpandingTildeInPath];
-	NSString *licenseDir = [supportDir stringByAppendingString:@"/Generated Licenses"];
+	NSString *supportDir = DATADIR_PATH;
+	NSString *licenseDir = [supportDir stringByAppendingPathComponent:@"Generated Licenses"];
 	BOOL isDir;
 	
-	// The ~/Library/Application Support/Aquatic/ folder doesn't exist yet
+	// The data directory doesn't exist yet
 	if (![fm fileExistsAtPath:supportDir isDirectory:&isDir])
 	{
 		// The support path leads to a file! Bad! This shouldn't happen ever!!
 		if (!isDir)
 			[fm removeItemAtPath:supportDir error:NULL];
 		
-		// Create the ~/Library/Application Support/Aquatic/ directory
+		// Create the data directory
 		[fm createDirectoryAtPath:supportDir withIntermediateDirectories:YES attributes:nil error:NULL];
 	}
 
-	// The ~/Library/Application Support/Aquatic/Generated Licenses folder doesn't exist yet
+	// The Generated Licenses folder doesn't exist yet
 	if  (![fm fileExistsAtPath:licenseDir isDirectory:&isDir])
 	{
 		// The licenses path leads to a file! Bad! This shouldn't happen ever!!
@@ -127,9 +127,9 @@
 		return;
 	
 	NSFileManager *fm = [NSFileManager defaultManager];
-	NSString *supportDir = [@"~/Library/Application Support/Aquatic" stringByExpandingTildeInPath];
-	NSString *templateDir = [supportDir stringByAppendingString:@"/License Templates"];
-	NSString *productPath = [templateDir stringByAppendingString:[NSString stringWithFormat:@"/%@.plist", [productController productAtIndex:index]]];
+	NSString *supportDir = DATADIR_PATH;
+	NSString *templateDir = [supportDir stringByAppendingPathComponent:@"License Templates"];
+	NSString *productPath = [templateDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.plist", [productController productAtIndex:index]]];
 	BOOL isDir;
 	
 	// Save this way to preserve the order of items
@@ -138,18 +138,18 @@
 																			[licenseExtensionField stringValue], @"Extension",
 																			[saveDirectoryField stringValue], @"Save Directory", nil];
 	
-	// The ~/Library/Application Support/Aquatic/ folder doesn't exist yet
+	// The data directory doesn't exist yet
 	if (![fm fileExistsAtPath:supportDir isDirectory:&isDir])
 	{
 		// The support path leads to a file! Bad! This shouldn't happen ever!!
 		if (!isDir)
 			[fm removeItemAtPath:supportDir error:NULL];
 		
-		// Create the ~/Library/Application Support/Aquatic/ directory
+		// Create the data directory
 		[fm createDirectoryAtPath:supportDir withIntermediateDirectories:YES attributes:nil error:NULL];
 	}
 	
-	// The ~/Library/Application Support/Aquatic/License Templates folder doesn't exist yet
+	// The License Templates folder doesn't exist yet
 	if  (![fm fileExistsAtPath:templateDir isDirectory:&isDir])
 	{
 		// The template path leads to a file! Bad! This shouldn't happen ever!!
@@ -171,7 +171,7 @@
 		return NO;
 	
 	NSFileManager *fm = [NSFileManager defaultManager];
-	NSString *supportDir = [@"~/Library/Application Support/Aquatic" stringByExpandingTildeInPath];
+	NSString *supportDir = DATADIR_PATH;
 	NSString *templateDir = [supportDir stringByAppendingPathComponent:@"License Templates"];
 	NSString *productPath = [[templateDir stringByAppendingPathComponent:[productController currentProduct]] stringByAppendingPathExtension:@"plist"];
 
