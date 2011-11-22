@@ -38,8 +38,8 @@
 
 - (void)awakeFromNib
 {
-	keyInfoArray = [[NSMutableArray alloc] init];
-	valueInfoArray = [[NSMutableArray alloc] init];
+	keyInfoArray = [[NSArray alloc] init];
+	valueInfoArray = [[NSArray alloc] init];
 	
 	[[self window] registerForDraggedTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]];
 }
@@ -131,8 +131,8 @@
 	// At this point, the license is invalid, but we show the key-value pairs anyway
 	NSMutableDictionary *badLicenseDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:licensePath];
 	[badLicenseDictionary removeObjectForKey:@"Signature"];
-	keyInfoArray = [[NSMutableArray arrayWithArray:[badLicenseDictionary allKeys]] retain];
-	valueInfoArray = [[NSMutableArray arrayWithArray:[badLicenseDictionary allValues]] retain];
+	keyInfoArray = [[NSArray arrayWithArray:[badLicenseDictionary allKeys]] retain];
+	valueInfoArray = [[NSArray arrayWithArray:[badLicenseDictionary allValues]] retain];
 	
 	return YES;
 }
