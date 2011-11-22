@@ -150,7 +150,11 @@
 			isa = PBXProject;
 			buildConfigurationList = 3D9364660856794A006F1864 /* Build configuration list for PBXProject "AquaticPrime" */;
 			compatibilityVersion = "Xcode 3.0";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 0867D691FE84028FC02AAC07 /* AquaticPrime */;
 			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
 			projectDirPath = "";
@@ -324,7 +328,7 @@
 				);
 				GCC_VERSION = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				SDKROOT = macosx;
 			};
 			name = Development;
 		};
@@ -337,7 +341,7 @@
 				);
 				GCC_VERSION = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				SDKROOT = macosx;
 			};
 			name = Deployment;
 		};
@@ -350,7 +354,7 @@
 				);
 				GCC_VERSION = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+				SDKROOT = macosx;
 			};
 			name = Default;
 		};
