@@ -53,6 +53,12 @@
 
 - (void)awakeFromNib
 {
+	// This was in applicationWillFinishLaunching, but that's too late under Lion, apparently, for this getting set before ProductController gets its shot at it.
+	NSDictionary *dict = [NSDictionary dictionaryWithObject:@"~/Library/Application Support/Aquatic" 
+													 forKey:DATADIR_DEFAULTS_KEY];
+	[[NSUserDefaults standardUserDefaults] registerDefaults:dict];
+	[[NSUserDefaults standardUserDefaults] synchronize];
+	
 	[self loadProducts];
 }
 

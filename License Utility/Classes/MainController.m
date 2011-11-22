@@ -4,13 +4,6 @@
 
 @implementation MainController
 
-- (void)applicationWillFinishLaunching:(NSNotification *)notification
-{
-	NSDictionary *dict = [NSDictionary dictionaryWithObject:@"~/Library/Application Support/Aquatic" 
-													 forKey:DATADIR_DEFAULTS_KEY];
-	[[NSUserDefaults standardUserDefaults] registerDefaults:dict];
-}
-
 - (void)awakeFromNib
 {
 	[mainWindow makeKeyAndOrderFront:self];
