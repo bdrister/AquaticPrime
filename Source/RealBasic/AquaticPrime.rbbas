@@ -752,8 +752,7 @@ Class AquaticPrime
 	#tag Constant, Name = advapi, Type = String, Dynamic = False, Default = \"advapi32.dll", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = CryptoLib, Type = String, Dynamic = False, Default = \"libcrypto.dylib", Scope = Private
-		#Tag Instance, Platform = Mac OS, Language = Default, Definition  = \"libcrypto.dylib"
+	#tag Constant, Name = CryptoLib, Type = String, Dynamic = False, Default = \"/usr/lib/libcrypto.dylib", Scope = Private
 		#Tag Instance, Platform = Linux, Language = Default, Definition  = \"libcrypto"
 	#tag EndConstant
 
