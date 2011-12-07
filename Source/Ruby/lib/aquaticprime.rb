@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 
 # AquaticPrime is a cryptographically secure licensing method for shareware
 # applications. The Ruby implementation currently only generates licenses, and
