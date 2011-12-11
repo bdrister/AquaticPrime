@@ -54,9 +54,11 @@ static KeyController *sharedInstance = nil;
 
 - (BOOL)validateMenuItem:(NSMenuItem *)aMenuItem
 {
-	if ([[aMenuItem title] isEqualToString:@"Export Keys..."]) {
-		if (![productController currentProduct])
+	if (aMenuItem.tag == 105) {
+		// "Export Keys..."
+		if (![productController currentProduct]) {
 			return NO;
+		}
 	}
 	
 	return YES;
@@ -339,8 +341,8 @@ static KeyController *sharedInstance = nil;
 	[selectPanel setCanChooseFiles:YES];
 	[selectPanel setCanChooseDirectories:NO];
 	[selectPanel setAllowsMultipleSelection:NO];
-	[selectPanel setPrompt:@"Select"];
-	[selectPanel setTitle:@"Select Key File"];
+	[selectPanel setPrompt:@"Choose"];
+	[selectPanel setTitle:@"Choose Key File"];
 	if ([selectPanel runModal] == NSFileHandlingPanelCancelButton)
 		return;
 	
@@ -354,10 +356,69 @@ static KeyController *sharedInstance = nil;
 	
 	NSFileManager *fm = [NSFileManager defaultManager];
 	NSString *productPath = [[DATADIR_PATH stringByAppendingFormat:@"/Product Keys/%@.plist", 
-															[keyPath lastPathComponent]] stringByExpandingTildeInPath];
-																																
+							  [keyPath lastPathComponent]] stringByExpandingTildeInPath];
+	
 	[fm copyItemAtPath:keyPath toPath:productPath error:NULL];
 	[productController loadProducts];
+}
+
+- (void)importKeyAsPrivate:(BOOL)asPrivate
+{
+	// Run the selection panel
+	NSOpenPanel *selectPanel = [NSOpenPanel openPanel];
+	[selectPanel setCanChooseFiles:YES];
+	[selectPanel setCanChooseDirectories:NO];
+	[selectPanel setAllowsMultipleSelection:NO];
+	[selectPanel setPrompt:@"Choose"];
+	[selectPanel setTitle:[NSString stringWithFormat:@"Choose %@ Key File", asPrivate?@"Private":@"Public"]];
+	if ([selectPanel runModal] == NSFileHandlingPanelCancelButton)
+		return;
+	
+	// Read the file contents
+	NSString *keyPath = [[selectPanel filenames] objectAtIndex:0];
+	NSString *fileContent = [NSString stringWithContentsOfFile:keyPath encoding:NSASCIIStringEncoding error:nil];
+	
+	// The data is expected to be a hex string, starting with 0x.
+	fileContent = [fileContent stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	NSString *firstTwoChars = [fileContent substringToIndex:2];
+	if (![firstTwoChars isEqualToString:@"0x"]) {
+		NSRunAlertPanel(@"Error", @"This file does not contain a hex string starting with 0x", @"OK", nil, nil);
+		return;
+	}
+	fileContent = [fileContent substringFromIndex:2]; // remove the "0x"
+	
+	BN_hex2bn (asPrivate ? &rsaKey->d : &rsaKey->n, [fileContent UTF8String]);
+	
+	[self saveKeysForProduct:[productController currentProduct]];
+	[productController loadProducts];
+}
+
+- (IBAction)importPublicKey:(id)sender
+{
+	[self importKeyAsPrivate:NO];
+}
+
+- (IBAction)importPrivateKey:(id)sender
+{
+	[self importKeyAsPrivate:YES];
+}
+
+- (NSMenu *)textView:(NSTextView *)view menu:(NSMenu *)menu forEvent:(NSEvent *)event atIndex:(NSUInteger)charIndex NS_AVAILABLE_MAC(10_5)
+{
+	if (![productController currentProduct]) {
+		// user needs to select a key pair first, then he can replace it this way
+	} else {
+		NSMenuItem *item = nil;
+		if (view == publicKeyView) {
+			item = [[NSMenuItem alloc] initWithTitle:@"Import Public Key..." action:@selector(importPublicKey:) keyEquivalent:@""];
+		} else if (view == privateKeyView) {
+			item = [[NSMenuItem alloc] initWithTitle:@"Import Private Key..." action:@selector(importPrivateKey:) keyEquivalent:@""];
+		}
+		item.target = self;
+		[menu addItem:[NSMenuItem separatorItem]];
+		[menu addItem:item];
+	}
+	return menu;
 }
 
 @end

@@ -10,8 +10,8 @@
 	IBOutlet NSTextField *licenseValidField;
 	IBOutlet NSTextField *hashField;
 	
-	NSMutableArray *keyInfoArray;
-	NSMutableArray *valueInfoArray;
+	NSArray *keyInfoArray;
+	NSArray *valueInfoArray;
 	BOOL isLicenseValid;
 	NSString *licenseValidForProduct;
 	NSString *hash;

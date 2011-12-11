@@ -27,7 +27,7 @@
 #import <Cocoa/Cocoa.h>
 #include <openssl/rsa.h>
 
-@interface KeyController : NSObject
+@interface KeyController : NSObject <NSTextViewDelegate>
 {
 	IBOutlet NSButton *generateButton;
 	IBOutlet NSPopUpButton *bitSelectPopUp;
@@ -46,11 +46,12 @@
 - (NSString*)publicKey;
 - (NSString*)privateKey;
 - (NSDictionary*)allPublicKeys;
-- (IBAction)generateKey:(id)sender;
 - (void)generateKeyForProduct:(NSString *)productName;
 - (void)populateKeyView;
 - (void)viewKeysForCurrentProduct;
 - (BOOL)loadKeysForProduct:(NSString *)productName;
 - (BOOL)saveKeysForProduct:(NSString *)productName;
+
+- (IBAction)generateKey:(id)sender;
 
 @end
