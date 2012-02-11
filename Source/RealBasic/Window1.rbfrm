@@ -269,7 +269,7 @@ End
 		      Listbox1.deleteAllRows
 		      StaticText2.text = ""
 		      for i as integer = 0 to licenseDict.count-1
-		        Listbox1.addRow licenseDict.key(i)
+		        Listbox1.addRow licenseDict.key(i).StringValue
 		        Listbox1.cell(listbox1.lastIndex, 1) = licenseDict.value(licenseDict.key(i))
 		      next
 		      StaticText2.text = "License Hash: "+licenseValidator.hash
