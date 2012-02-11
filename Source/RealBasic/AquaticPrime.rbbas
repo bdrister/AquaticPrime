@@ -83,7 +83,6 @@ Class AquaticPrime
 		  dim keyArray(-1) as string
 		  dim valueArray(-1) as string
 		  dim node as XMLNode
-		  dim element as XMLElement
 		  dim n as integer
 		  dim sigBytes as MemoryBlock
 		  
@@ -119,23 +118,38 @@ Class AquaticPrime
 		    
 		    node = dict.firstChild
 		    
-		    do
-		      if not node isA XMLElement then
-		        return nil
-		      end if
-		      element = XMLElement(node)
-		      if element.childCount <> 1 or not element.firstChild isA XMLTextNode then
+		    while node isA XMLElement
+		      dim element as XMLElement = XMLElement(node)
+		      dim childCount as Integer = element.childCount
+		      dim firstChild as XMLNode = element.firstChild
+		      dim localName as String = element.LocalName
+		      
+		      if localName = "key" then
+		        if childCount = 1 and firstChild isA XMLTextNode then
+		          keyArray.append firstChild.value
+		        else
+		          // Error: invalid key
+		          _setError kLicenseDataNotValidError
+		          return nil
+		        end if
+		      elseif localName = "string" or localName = "data" then
+		        if childCount = 0 then
+		          // Empty value
+		          valueArray.append ""
+		        elseif childCount = 1 and firstChild isA XMLTextNode then
+		          valueArray.append firstChild.value
+		        else
+		          // Error: invalid value
+		          _setError kLicenseDataNotValidError
+		          return nil
+		        end
+		      else
+		        // It's neither a key nor a string/data value. This shouldn't be allowed, should it?
 		        _setError kLicenseDataNotValidError
 		        return nil
 		      end if
-		      
-		      if element.LocalName = "key" then
-		        keyArray.append element.firstChild.value
-		      elseif element.LocalName = "string" or element.LocalName = "data" then
-		        valueArray.append element.firstChild.value
-		      end if
 		      node = element.nextSibling
-		    loop until node is nil
+		    wend
 		    
 		    // Get the signature
 		    sigBytes = DecodeBase64(valueArray(keyArray.indexOf("Signature")))
