@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'aquaticprime'
-  s.version = '1.0.0'
+  s.version = '1.1.0'
   s.authors = ['John Labovitz', 'Benjamin Rister']
   s.email = ['johnl@johnlabovitz.com', 'aquaticprime@decimus.net']
   s.summary = 'AquaticPrime is a cryptographically secure licensing method for shareware applications. The Ruby implementation currently only generates licenses, and is intended for use in online stores.'
