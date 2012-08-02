@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+<dictionary title="Zip Licensor Terminology">
+	<suite name="Zip Licensor Suite" code="Aqu1" description="Zip Licensor commands">
+		<command name="write license file" code="Aqu1gLic" description="Writes a license file based on the currently entered key pairs and additional fields.">
+			<direct-parameter description="The name and email fields, separated by a Tab char" type="string"/>
+			<result description="path to the generated file" type="file"/>
+		</command>
+	</suite>
+</dictionary>
