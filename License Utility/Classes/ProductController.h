@@ -25,11 +25,11 @@
 // OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Cocoa/Cocoa.h>
-@class OAGradientTableView;
+@class AQTableView;
 
 @interface ProductController : NSObject
 {
-    IBOutlet OAGradientTableView *productTable;
+    IBOutlet AQTableView *productTable;
 	IBOutlet NSButton *cancelButton;
 	IBOutlet NSButton *saveButton;
 	IBOutlet NSButton *removeButton;

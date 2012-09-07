@@ -25,11 +25,13 @@
 // OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "AquaticPrime.h"
+#import "NSData+hexDigits.h"
 
 @interface AquaticPrime()
 @property (nonatomic, assign) SecKeyRef publicKeyRef;
 @property (nonatomic, assign) SecKeyRef privateKeyRef;
-@property (nonatomic, retain) NSString *aqError;
+@property (nonatomic, strong) NSString *aqError;
+@property (nonatomic, strong) NSString *cachedPrivateKey; // Because we can't export it once we've imported it
 @end
 
 @implementation AquaticPrime
@@ -79,6 +81,7 @@
         if (_privateKeyRef != NULL) {
             CFRetain(_privateKeyRef);
         }
+        self.cachedPrivateKey = nil;
     }
 }
 
@@ -126,11 +129,17 @@
 
     SecItemImportExportKeyParameters params = {0};
     params.version = SEC_KEY_IMPORT_EXPORT_PARAMS_VERSION;
-    
+    params.flags = kSecKeyNoAccessControl;
     SecExternalItemType itemType = kSecItemTypePublicKey;
     SecExternalFormat externalFormat = kSecFormatPEMSequence;
     CFArrayRef temparray = NULL;
     OSStatus oserr = noErr;
+    
+    // Set the key as extractable. Looking through the source code in SecImportExportUtils.cpp
+    // it looks like this isn't handled, yet it seems to be documented to me. One day the code
+    // may catch up, so I'm leaving this here to show the intention.
+    NSArray *keyAttributes = @[ @(CSSM_KEYATTR_EXTRACTABLE) ];
+    params.keyAttributes = (__bridge CFArrayRef)(keyAttributes);
     
     oserr = SecItemImport((__bridge CFDataRef)[key dataUsingEncoding:NSUTF8StringEncoding],
                           NULL,
@@ -152,7 +161,7 @@
     if (privateKey != nil) {
         itemType = kSecItemTypeCertificate;
         externalFormat = kSecFormatPEMSequence;
-        
+
         oserr = SecItemImport((__bridge CFDataRef)[privateKey dataUsingEncoding:NSUTF8StringEncoding],
                               NULL,
                               &externalFormat,
@@ -169,6 +178,9 @@
         
         self.privateKeyRef = (SecKeyRef)CFArrayGetValueAtIndex(temparray, 0);
         CFRelease(temparray);
+        
+        // Since we can't export the key yet, keep a cached copy
+        self.cachedPrivateKey = privateKey;
     }
     
     return YES;
@@ -199,23 +211,14 @@
     
     // Munch through the hex string, taking two characters at a time for each byte
     // to append as the key data
-    NSUInteger keyTextLength = [key length];
-    NSRange range = NSMakeRange(0, 2);
-    unsigned int uintValue = 0;
-    uint8_t byteValue = 0;
-    for (range.location = 0; range.location < keyTextLength; range.location+=2) {
-        NSScanner *scanner = [NSScanner scannerWithString:[key substringWithRange:range]];
-        if ([scanner scanHexInt:&uintValue]) {
-            byteValue = (uint8_t)uintValue;
-            [keyData appendBytes:&byteValue length:1];
-        }
-        else {
-            // Failed to import the key (bad hex digit?)
-            [self setAqError:@"Bad public key"];
-            return nil;
-        }
+    NSData *rawKey = [NSData dataWithHexDigitRepresentation:key];
+    if (rawKey == nil) {
+        // Failed to import the key (bad hex digit?)
+        [self setAqError:@"Bad public key"];
+        return nil;
     }
     
+    [keyData appendData:rawKey];
     [keyData appendBytes:raw2 length:sizeof(raw2)/sizeof(uint8_t)];
     
     // Just need to base64 encode this data now and wrap the string
@@ -262,7 +265,7 @@
     SecItemImportExportKeyParameters params = {0};
     params.version = SEC_KEY_IMPORT_EXPORT_PARAMS_VERSION;
     
-    NSArray *keyUsage = @[ (id)kSecAttrCanVerify, (id)kSecAttrCanEncrypt ];
+    NSArray *keyUsage = @[ (id)kSecAttrCanVerify ];
     params.keyUsage = (__bridge CFArrayRef)(keyUsage);
     
     NSArray *keyAttributes = @[];
@@ -296,10 +299,10 @@
     SecItemImportExportKeyParameters params = {0};
     params.version = SEC_KEY_IMPORT_EXPORT_PARAMS_VERSION;
     
-    NSArray *keyUsage = @[ (id)kSecAttrCanSign, (id)kSecAttrCanVerify ];
+    NSArray *keyUsage = @[ (id)kSecAttrCanSign ];
     params.keyUsage = (__bridge CFArrayRef)(keyUsage);
     
-    NSArray *keyAttributes = @[];
+    NSArray *keyAttributes = @[ ];
     params.keyAttributes = (__bridge CFArrayRef)(keyAttributes);
     
     SecExternalFormat externalFormat = kSecFormatPEMSequence;
@@ -312,8 +315,9 @@
                           &params,
                           (CFDataRef *)&pkCfData);
     if (oserr) {
+        // Did we keep a cached copy of the private key?
         [self setAqError:[NSString stringWithFormat:@"Failed to export private key (oserr=%ld)", (long)oserr]];
-        return nil;
+        return self.cachedPrivateKey;
     }
     
     NSData *pkData = (__bridge_transfer NSData*)pkCfData;
@@ -533,14 +537,7 @@
     }
     
     NSData *hash = [self computedHashForDictionary:licenseDict];
-    uint8_t *checkDigest = (uint8_t*)[hash bytes];
-    NSUInteger hashIndex = 0, hashLength = [hash length];
-    
-    // Make sure the license hash isn't on the blacklist
-    NSMutableString *hashCheck = [NSMutableString string];
-    for (hashIndex = 0; hashIndex < hashLength; hashIndex++) {
-        [hashCheck appendFormat:@"%02x", checkDigest[hashIndex]];
-    }
+    NSString *hashCheck = [hash hexDigitRepresentation];
     
     // Store the license hash in case we need it later
     [self setHash:hashCheck];
@@ -618,7 +615,7 @@
 
 - (void)setAqError:(NSString *)aqError {
     _aqError = aqError;
-#ifdef DEBUG
+#ifndef NDEBUG
     NSLog(@"AquaticPrime error: %@", _aqError);
 #endif
 }

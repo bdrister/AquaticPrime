@@ -59,7 +59,7 @@
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
-	return NSDragOperationNone;
+	return NSDragOperationMove;
 }
 
 - (void)draggingExited:(id <NSDraggingInfo>)sender
@@ -109,30 +109,27 @@
 	for (productIndex = 0; productIndex < [productArray count]; productIndex++)
 	{
 		NSString *currentProduct = [productArray objectAtIndex:productIndex];
-		NSData *publicKey = [productKeyDictionary objectForKey:currentProduct];
-		NSMutableString *publicKeyString = [NSMutableString stringWithString:[publicKey description]];
-		[publicKeyString replaceOccurrencesOfString:@" " withString:@"" options:0 range:NSMakeRange(0, [publicKeyString length])];
-		[publicKeyString replaceOccurrencesOfString:@"<" withString:@"" options:0 range:NSMakeRange(0, [publicKeyString length])];
-		[publicKeyString replaceOccurrencesOfString:@">" withString:@"" options:0 range:NSMakeRange(0, [publicKeyString length])];
-		
-		AquaticPrime *licenseChecker = [AquaticPrime aquaticPrimeWithKey:[NSString stringWithFormat:@"0x%@", publicKeyString]];
-		licenseDictionary = [licenseChecker dictionaryForLicenseFile:licensePath];
-		
-		if (licenseDictionary) {
-			keyInfoArray = [[licenseDictionary allKeys] retain];
-			valueInfoArray = [[licenseDictionary allValues] retain];
-			hash = (NSString *)[licenseChecker hash];
-			isLicenseValid = YES;
-			licenseValidForProduct = [currentProduct retain];
-			return YES;
-		}
+		NSString *publicKeyString = [productKeyDictionary objectForKey:currentProduct];
+        if ([publicKeyString isKindOfClass:[NSString class]]) {
+            AquaticPrime *licenseChecker = [AquaticPrime aquaticPrimeWithKey:publicKeyString];
+            licenseDictionary = [licenseChecker dictionaryForLicenseFile:licensePath];
+            
+            if (licenseDictionary) {
+                keyInfoArray = [licenseDictionary allKeys];
+                valueInfoArray = [licenseDictionary allValues];
+                hash = (NSString *)[licenseChecker hash];
+                isLicenseValid = YES;
+                licenseValidForProduct = currentProduct;
+                return YES;
+            }
+        }
 	}
 	
 	// At this point, the license is invalid, but we show the key-value pairs anyway
 	NSMutableDictionary *badLicenseDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:licensePath];
 	[badLicenseDictionary removeObjectForKey:@"Signature"];
-	keyInfoArray = [[NSArray arrayWithArray:[badLicenseDictionary allKeys]] retain];
-	valueInfoArray = [[NSArray arrayWithArray:[badLicenseDictionary allValues]] retain];
+	keyInfoArray = [NSArray arrayWithArray:[badLicenseDictionary allKeys]];
+	valueInfoArray = [NSArray arrayWithArray:[badLicenseDictionary allValues]];
 	
 	return YES;
 }
