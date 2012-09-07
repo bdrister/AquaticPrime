@@ -159,7 +159,7 @@
     CFRelease(temparray);
     
     if (privateKey != nil) {
-        itemType = kSecItemTypeCertificate;
+        itemType = kSecItemTypePrivateKey;
         externalFormat = kSecFormatPEMSequence;
 
         oserr = SecItemImport((__bridge CFDataRef)[privateKey dataUsingEncoding:NSUTF8StringEncoding],
