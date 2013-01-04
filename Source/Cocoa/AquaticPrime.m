@@ -267,7 +267,7 @@
 		return nil;
 		
 	NSData *signature = [licenseDict objectForKey:@"Signature"];
-	if (!signature)
+	if (!signature || ![signature isKindOfClass: [NSData class]])
 		return nil;
 	
 	// Decrypt the signature - should get 20 bytes back
