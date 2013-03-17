@@ -45,7 +45,7 @@
 }
 
 - (id)initWithKey:(NSString *)key privateKey:(NSString *)privateKey {
-    if (![super init])
+    if (!(self = [super init]))
         return nil;
     
     _publicKeyRef = NULL;
@@ -227,6 +227,9 @@
     SecTransformRef encoder = SecEncodeTransformCreate(kSecBase64Encoding, &error);
     if (error != NULL) {
         [self setAqError:@"Failed to create base64 encoder"];
+        if (encoder) {
+            CFRelease(encoder);
+        }
         return nil;
     }
     SecTransformSetAttribute(encoder,
@@ -391,6 +394,9 @@
     CFDataRef cfHash = SecTransformExecute(hashFunction, &error);
     if (error != NULL) {
         cleanup();
+        if (cfHash) {
+            CFRelease(cfHash);
+        }
         return nil;
     }
     
@@ -455,6 +461,9 @@
     if (error) {
         cleanup();
         [self setAqError:@"Signature is NULL!"];
+        if (cfSignature) {
+            CFRelease(cfSignature);
+        }
         return nil;
     }
 
