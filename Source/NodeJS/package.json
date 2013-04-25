@@ -1,7 +1,7 @@
 {
   "name": "aquatic-prime",
   "preferGlobal": false,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Max Desyatov <max.desyatov@gmail.com>",
   "description": "node.js port of AquaticPrime license generator",
   "contributors": [
