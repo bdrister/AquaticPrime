@@ -15,7 +15,7 @@ powmod = (x, a, m) ->
   r
 
 getSignature = (licensee, priv, pub) ->
-  total = (licensee[k] for key in (k for k of licensee).sort()).join ''
+  total = (licensee[key] for key in (k for k of licensee).sort()).join ''
   hash = crypto.createHash 'sha1'
   hash.update total, 'utf8'
   digest = hash.digest 'hex'
