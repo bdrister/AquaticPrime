@@ -3,3 +3,4 @@ AquaticPrime Developer.app
 .idea
 *.xcuserstate
 node_modules
+Source/NodeJS/dist

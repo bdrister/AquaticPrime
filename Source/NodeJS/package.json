@@ -1,7 +1,7 @@
 {
   "name": "aquatic-prime",
   "preferGlobal": false,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Max Desyatov <max.desyatov@gmail.com>",
   "description": "node.js port of AquaticPrime license generator",
   "contributors": [
@@ -10,7 +10,7 @@
       "email": "max.desyatov@gmail.com"
     }
   ],
-  "main": "./aquatic_prime.coffee",
+  "main": "./aquatic_prime.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/explicitcall/AquaticPrime"
@@ -27,5 +27,12 @@
   "license": "MIT",
   "engines": {
     "node": ">=0.10"
+  },
+  "devDependencies": {
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt": "~0.4.1",
+    "grunt-contrib-clean": "~0.4.1",
+    "matchdep": "~0.1.2"
   }
 }
