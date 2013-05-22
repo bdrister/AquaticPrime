@@ -123,10 +123,19 @@ CFDictionaryRef APCreateDictionaryForLicenseData(CFDataRef data)
     }
     
     CFDataRef sigData = CFDictionaryGetValue(licenseDictionary, CFSTR("Signature"));
+	// Folow the «Get Rule» of Apple's «Memory Management Programming Guide for Core Foundation»
+	// Just to be sure that we won't lose it
+	CFRetain(sigData);
+	if (CFGetTypeID(sigData) != CFDataGetTypeID()) {
+		CFRelease(licenseDictionary);
+		CFRelease(sigData);
+		return NULL;
+	}
 	CFIndex sigDataLength = CFDataGetLength(sigData);
 	UInt8 sigBytes[sigDataLength];
     CFDataGetBytes(sigData, CFRangeMake(0, sigDataLength), sigBytes);
     CFDictionaryRemoveValue(licenseDictionary, CFSTR("Signature"));
+	CFRelease(sigData);
     
     // Decrypt the signature
 	int checkDigestMaxSize = RSA_size(rsaKey)-11;
