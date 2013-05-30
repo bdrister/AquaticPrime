@@ -106,7 +106,6 @@ Boolean APSetKey(CFStringRef key)
     }
     
     publicKeyRef = (SecKeyRef)CFArrayGetValueAtIndex(tempArray, 0);
-    CFShow(publicKeyRef);
     CFRetain(publicKeyRef);
     CFRelease(tempArray);
     
