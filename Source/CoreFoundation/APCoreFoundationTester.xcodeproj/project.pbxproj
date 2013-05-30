@@ -11,6 +11,7 @@
 		8DD76F770486A8DE00D96B5E /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.c */; settings = {ATTRIBUTES = (); }; };
 		8DD76F790486A8DE00D96B5E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */; };
 		8DD76F7C0486A8DE00D96B5E /* APCoreFoundationTester.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6859E970290921104C91782 /* APCoreFoundationTester.1 */; };
+		B5030D221755306C00027FAD /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5030D211755306C00027FAD /* Security.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +33,7 @@
 		25AB887910752514004DF8A3 /* AquaticPrime.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = AquaticPrime.c; sourceTree = "<group>"; };
 		25AB887A10752514004DF8A3 /* AquaticPrime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AquaticPrime.h; sourceTree = "<group>"; };
 		8DD76F7E0486A8DE00D96B5E /* APCoreFoundationTester */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = APCoreFoundationTester; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5030D211755306C00027FAD /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		C6859E970290921104C91782 /* APCoreFoundationTester.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = APCoreFoundationTester.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -41,6 +43,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DD76F790486A8DE00D96B5E /* CoreFoundation.framework in Frameworks */,
+				B5030D221755306C00027FAD /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,6 +75,7 @@
 			isa = PBXGroup;
 			children = (
 				09AB6884FE841BABC02AAC07 /* CoreFoundation.framework */,
+				B5030D211755306C00027FAD /* Security.framework */,
 			);
 			name = "External Frameworks and Libraries";
 			sourceTree = "<group>";
@@ -153,7 +157,6 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/bin;
-				OTHER_LDFLAGS = "-lcrypto";
 				PRODUCT_NAME = APCoreFoundationTester;
 			};
 			name = Debug;
@@ -165,7 +168,6 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/bin;
-				OTHER_LDFLAGS = "-lcrypto";
 				PRODUCT_NAME = APCoreFoundationTester;
 			};
 			name = Release;
@@ -180,7 +182,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx10.5;
+				SDKROOT = "";
 			};
 			name = Debug;
 		};
@@ -193,7 +195,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = macosx10.5;
+				SDKROOT = "";
 			};
 			name = Release;
 		};

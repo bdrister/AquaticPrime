@@ -25,8 +25,6 @@
 // OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <CoreFoundation/CoreFoundation.h>
-#include <openssl/rsa.h>
-#include <openssl/sha.h>
 
 // Set the key - must be called first
 Boolean APSetKey(CFStringRef key);
@@ -37,7 +35,7 @@ CFDictionaryRef APCreateDictionaryForLicenseFile(CFURLRef path);
 Boolean APVerifyLicenseData(CFDataRef data);
 Boolean APVerifyLicenseFile(CFURLRef path);
 
-CFStringRef APHash(void);
+CFStringRef APCopyHash(void);
 void APBlacklistAdd(CFStringRef blacklistEntry);
 void APSetBlacklist(CFArrayRef hashArray);
 
