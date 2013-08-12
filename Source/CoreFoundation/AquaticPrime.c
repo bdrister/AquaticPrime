@@ -395,11 +395,25 @@ CFDictionaryRef APCreateDictionaryForLicenseFile(CFURLRef path)
 {
     CFDictionaryRef licenseDictionary = NULL;
 
-    CFDataRef data;
-    SInt32 errorCode;
-    Boolean status = CFURLCreateDataAndPropertiesFromResource(kCFAllocatorDefault, path, &data, NULL, NULL, &errorCode);
+    CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault, 0);
+    CFReadStreamRef readStream = CFReadStreamCreateWithFile(kCFAllocatorDefault, path);
+    if (readStream && CFReadStreamOpen(readStream))
+    {
+        UInt8 buffer[1024];
+        CFIndex bytesRead = 0;
+        do {
+            bytesRead = CFReadStreamRead(readStream, &buffer[0], APArrayLength(buffer));
+            if (bytesRead > 0)
+            {
+                CFDataAppendBytes(data, buffer, bytesRead);
+            }
+        } while (bytesRead > 0);
+        
+        CFReadStreamClose(readStream);
+    }
+    APRelease(readStream);
 
-    if (status == TRUE && errorCode == 0)
+    if (CFDataGetLength(data) > 0)
     {
         licenseDictionary = APCreateDictionaryForLicenseData(data);
     }
