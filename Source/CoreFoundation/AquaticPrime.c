@@ -377,7 +377,7 @@ CFDictionaryRef APCreateDictionaryForLicenseData(CFDataRef data)
     
     
     // Check the hash against license blacklist
-    if (blacklist && CFArrayContainsValue(blacklist, CFRangeMake(0, CFArrayGetCount(blacklist)), hashCheck)) {
+    if (blacklist && CFArrayContainsValue(blacklist, CFRangeMake(0, CFArrayGetCount(blacklist)), hash)) {
         cleanup();
         return NULL;
     }
