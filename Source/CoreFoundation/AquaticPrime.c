@@ -134,9 +134,6 @@ CFStringRef APPEMKeyCreateFromHexKey(CFStringRef hexKey)
     };
     
     
-    CFMutableDataRef keyData = CFDataCreateMutable(kCFAllocatorDefault, 0);
-    CFDataAppendBytes(keyData, raw1, sizeof(raw1)/sizeof(uint8_t));
-    
     // Munch through the hex string, taking two characters at a time for each byte
     // to append as the key data
     CFDataRef rawKey = APCopyDataFromHexString(hexKey);
@@ -145,6 +142,9 @@ CFStringRef APPEMKeyCreateFromHexKey(CFStringRef hexKey)
         CFShow(CFSTR("Bad public key?"));
         return NULL;
     }
+    
+    CFMutableDataRef keyData = CFDataCreateMutable(kCFAllocatorDefault, 0);
+    CFDataAppendBytes(keyData, raw1, sizeof(raw1)/sizeof(uint8_t));
     
     const UInt8 *rawKeyBuffer = CFDataGetBytePtr(rawKey);
     CFDataAppendBytes(keyData, rawKeyBuffer, CFDataGetLength(rawKey));
@@ -162,6 +162,9 @@ CFStringRef APPEMKeyCreateFromHexKey(CFStringRef hexKey)
         if (encoder) {
             CFRelease(encoder);
         }
+        if (keyData) {
+            CFRelease(keyData);
+        }
         return NULL;
     }
     SecTransformSetAttribute(encoder,
@@ -170,6 +173,9 @@ CFStringRef APPEMKeyCreateFromHexKey(CFStringRef hexKey)
                              &error);
     if (error != NULL) {
         CFRelease(encoder);
+        if (keyData) {
+            CFRelease(keyData);
+        }
         CFShow(error);
         return NULL;
     }
@@ -377,7 +383,7 @@ CFDictionaryRef APCreateDictionaryForLicenseData(CFDataRef data)
     
     
     // Check the hash against license blacklist
-    if (blacklist && CFArrayContainsValue(blacklist, CFRangeMake(0, CFArrayGetCount(blacklist)), hashCheck)) {
+    if (blacklist && CFArrayContainsValue(blacklist, CFRangeMake(0, CFArrayGetCount(blacklist)), hash)) {
         cleanup();
         return NULL;
     }
