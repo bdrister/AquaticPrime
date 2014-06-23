@@ -59,7 +59,7 @@
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
-	return NSDragOperationNone;
+	return NSDragOperationGeneric;
 }
 
 - (void)draggingExited:(id <NSDraggingInfo>)sender
