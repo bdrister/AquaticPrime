@@ -11,7 +11,7 @@
 	AboutController *aboutController;
 	NSWindow *prefsWindow;
 }
-@property (nonatomic, retain) IBOutlet NSWindow *prefsWindow;
+@property (nonatomic, strong) IBOutlet NSWindow *prefsWindow;
 - (IBAction)showLicenseInfoWindow:(id)sender;
 - (IBAction)closeWindow:(id)sender;
 - (IBAction)showPreferences:(id)sender;

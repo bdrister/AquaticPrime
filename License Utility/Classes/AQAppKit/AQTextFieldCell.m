@@ -20,7 +20,6 @@
    cellFrame.origin.y += (cellFrame.size.height - stringSize.height) / 2;
    cellFrame.size.height = stringSize.height;
    [string drawInRect:cellFrame withAttributes:attribs];
-   [attribs release];
 }
 
 @end

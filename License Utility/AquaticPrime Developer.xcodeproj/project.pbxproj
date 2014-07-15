@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 44;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,7 +12,6 @@
 		3D12D14B085206240035BA78 /* add.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 3D12D14A085206240035BA78 /* add.tiff */; };
 		3D12D159085208CC0035BA78 /* StatusController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D12D158085208CC0035BA78 /* StatusController.m */; };
 		3D12D1C008520D0E0035BA78 /* ProductController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D12D1BF08520D0E0035BA78 /* ProductController.m */; };
-		3D160600089D3DBC00526ED8 /* OAGradientTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1605FE089D3DBC00526ED8 /* OAGradientTableView.m */; };
 		3D1606A4089D41C100526ED8 /* AQTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D1606A2089D41C100526ED8 /* AQTextFieldCell.m */; };
 		3D4458EB08971CEC002901EB /* aquatic.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3D4458EA08971CEC002901EB /* aquatic.icns */; };
 		3D9364030856724F006F1864 /* LicenseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D9364020856724F006F1864 /* LicenseController.m */; };
@@ -32,6 +31,8 @@
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		A0DA7A7509B3B3AA00673D39 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0DA7A7409B3B3AA00673D39 /* Cocoa.framework */; };
 		E804BCA70833AAFD00512005 /* KeyController.m in Sources */ = {isa = PBXBuildFile; fileRef = E804BCA60833AAFD00512005 /* KeyController.m */; };
+		F476C47815F9CAE9006DA0CB /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F476C47715F9CAE9006DA0CB /* Security.framework */; };
+		F4F5636F15FA038900A99DF5 /* NSData+hexDigits.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F5636E15FA038900A99DF5 /* NSData+hexDigits.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -60,8 +61,6 @@
 		3D12D158085208CC0035BA78 /* StatusController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = StatusController.m; sourceTree = "<group>"; };
 		3D12D1BE08520D0E0035BA78 /* ProductController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ProductController.h; sourceTree = "<group>"; };
 		3D12D1BF08520D0E0035BA78 /* ProductController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ProductController.m; sourceTree = "<group>"; };
-		3D1605FE089D3DBC00526ED8 /* OAGradientTableView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OAGradientTableView.m; sourceTree = "<group>"; };
-		3D1605FF089D3DBC00526ED8 /* OAGradientTableView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OAGradientTableView.h; sourceTree = "<group>"; };
 		3D1606A2089D41C100526ED8 /* AQTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AQTextFieldCell.m; sourceTree = "<group>"; };
 		3D1606A3089D41C100526ED8 /* AQTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AQTextFieldCell.h; sourceTree = "<group>"; };
 		3D4458EA08971CEC002901EB /* aquatic.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = aquatic.icns; path = Images/aquatic.icns; sourceTree = "<group>"; };
@@ -89,6 +88,9 @@
 		A0DA7A7409B3B3AA00673D39 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		E804BCA50833AAFD00512005 /* KeyController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = KeyController.h; sourceTree = "<group>"; };
 		E804BCA60833AAFD00512005 /* KeyController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = KeyController.m; sourceTree = "<group>"; };
+		F476C47715F9CAE9006DA0CB /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		F4F5636D15FA038900A99DF5 /* NSData+hexDigits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+hexDigits.h"; sourceTree = "<group>"; };
+		F4F5636E15FA038900A99DF5 /* NSData+hexDigits.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+hexDigits.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F476C47815F9CAE9006DA0CB /* Security.framework in Frameworks */,
 				A0DA7A7509B3B3AA00673D39 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -133,6 +136,8 @@
 			children = (
 				25C22E74108E664700D1D72F /* AquaticPrime.h */,
 				25C22E75108E664700D1D72F /* AquaticPrime.m */,
+				F4F5636D15FA038900A99DF5 /* NSData+hexDigits.h */,
+				F4F5636E15FA038900A99DF5 /* NSData+hexDigits.m */,
 			);
 			name = Cocoa;
 			path = ../Source/Cocoa;
@@ -141,6 +146,7 @@
 		29B97314FDCFA39411CA2CEA /* AquaticPrimeDeveloper */ = {
 			isa = PBXGroup;
 			children = (
+				F476C47715F9CAE9006DA0CB /* Security.framework */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -280,8 +286,6 @@
 			children = (
 				3D1606A3089D41C100526ED8 /* AQTextFieldCell.h */,
 				3D1606A2089D41C100526ED8 /* AQTextFieldCell.m */,
-				3D1605FF089D3DBC00526ED8 /* OAGradientTableView.h */,
-				3D1605FE089D3DBC00526ED8 /* OAGradientTableView.m */,
 				3DD108BD088170A100C4C6B4 /* AQTableView.h */,
 				3DD108BE088170A100C4C6B4 /* AQTableView.m */,
 			);
@@ -325,10 +329,10 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0440;
 			};
 			buildConfigurationList = 3D9363D608565C58006F1864 /* Build configuration list for PBXProject "AquaticPrime Developer" */;
-			compatibilityVersion = "Xcode 3.0";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -382,9 +386,9 @@
 				3DD108C2088170A100C4C6B4 /* AQAboutWindow.m in Sources */,
 				3DD108C4088170A100C4C6B4 /* AQTableView.m in Sources */,
 				3DD108F80881726E00C4C6B4 /* AboutController.m in Sources */,
-				3D160600089D3DBC00526ED8 /* OAGradientTableView.m in Sources */,
 				3D1606A4089D41C100526ED8 /* AQTextFieldCell.m in Sources */,
 				25C22E76108E664700D1D72F /* AquaticPrime.m in Sources */,
+				F4F5636F15FA038900A99DF5 /* NSData+hexDigits.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +417,9 @@
 		3D9363D308565C58006F1864 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -423,11 +430,12 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				MACOSX_DEPLOYMENT_TARGET_i386 = 10.5;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.3;
 				OTHER_LDFLAGS = "-lcrypto";
 				PRODUCT_NAME = "AquaticPrime Developer";
+				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -436,6 +444,9 @@
 		3D9363D408565C58006F1864 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -451,12 +462,13 @@
 				GENERATE_PKGINFO_FILE = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				MACOSX_DEPLOYMENT_TARGET_i386 = 10.5;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.3;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "-lcrypto";
 				PRODUCT_NAME = "AquaticPrime Developer";
+				VALID_ARCHS = x86_64;
 				WARNING_CFLAGS = "-Wno-unused";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
@@ -466,6 +478,9 @@
 		3D9363D508565C58006F1864 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = AquaticPrimeDeveloper_Prefix.pch;
@@ -473,11 +488,12 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				MACOSX_DEPLOYMENT_TARGET_i386 = 10.5;
 				MACOSX_DEPLOYMENT_TARGET_ppc = 10.3;
 				OTHER_LDFLAGS = "-lcrypto";
 				PRODUCT_NAME = "AquaticPrime Developer";
+				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -493,8 +509,7 @@
 		3D9363D808565C58006F1864 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				SDKROOT = macosx;
 			};
 			name = Deployment;
@@ -502,8 +517,7 @@
 		3D9363D908565C58006F1864 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				SDKROOT = macosx;
 			};
 			name = Default;
