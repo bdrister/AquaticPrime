@@ -9,12 +9,13 @@
   */
   
 /**
-  * hex2bin
+  * Renamed hex2bin to ap_hex2bin to avoid Fatal error since PHP 5.4 has its own hex2bin function
+  * ap_hex2bin
   * Converts a hexadecimal string to binary
   * @param string Hex string
   * @return string Binary string
   */
-function hex2bin($hex) {
+function ap_hex2bin($hex) {
     if (strlen($hex) % 2)
         $hex = "0".$hex;
     
@@ -167,7 +168,7 @@ function getSignature($dict, $key, $privKey)
 
         // Encrypt into a signature
         $sig = powmod($decryptedSig, hex2dec($privKey), hex2dec($key));
-        $sig = base64_encode(hex2bin(dec2hex($sig)));
+        $sig = base64_encode(ap_hex2bin(dec2hex($sig)));
     }
     return $sig;
 }
