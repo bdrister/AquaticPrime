@@ -51,7 +51,7 @@
     _publicKeyRef = NULL;
     _privateKeyRef = NULL;
     _aqError = [[NSString alloc] init];
-    _hash = [[NSString alloc] init];
+    self.hash = [[NSString alloc] init];
     
     [self setKey:key privateKey:privateKey];
     
