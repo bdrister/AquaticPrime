@@ -27,6 +27,8 @@
 #import "KeyController.h"
 #import "ProductController.h"
 #import "StatusController.h"
+#import "AquaticPrime.h"
+#import "NSData+HexDigits.h"
 
 @implementation KeyController
 
@@ -37,7 +39,6 @@ static KeyController *sharedInstance = nil;
 - (id)init
 {
 	if (sharedInstance) {
-        [self dealloc];
     } else {
         sharedInstance = [super init];
 		[[NSNotificationCenter defaultCenter] addObserver:sharedInstance selector:@selector(viewKeysForCurrentProduct) name:@"ProductSelected" object:nil];
@@ -49,7 +50,6 @@ static KeyController *sharedInstance = nil;
 - (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[super dealloc];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)aMenuItem
@@ -73,32 +73,20 @@ static KeyController *sharedInstance = nil;
 
 - (NSString *)publicKey
 {
-	NSString *nString;
-	char *cString;
+	NSString *nString = [keyGenerator key];
 	
-	if (!rsaKey->n)
+	if (!nString)
 		return nil;
-	
-	cString = BN_bn2hex(rsaKey->n);
-	
-	nString = [[[NSString stringWithFormat:@"0x%s", cString] retain] autorelease];
-	OPENSSL_free(cString);
 	
 	return nString;
 }
 
 - (NSString *)privateKey
 {
-	NSString *nString;
-	char *cString;
-	
-	if (!rsaKey->d)
+	NSString *nString = [keyGenerator privateKey];
+
+	if (!nString)
 		return nil;
-	
-	cString = BN_bn2hex(rsaKey->d);
-	
-	nString = [[[NSString stringWithFormat:@"0x%s", cString] retain] autorelease];
-	OPENSSL_free(cString);
 	
 	return nString;
 }
@@ -144,7 +132,7 @@ static KeyController *sharedInstance = nil;
 - (void)populateKeyView
 {
 	// The public key
-	NSString *pubKey = [NSString stringWithFormat:@"0x%s", BN_bn2hex(rsaKey->n)];
+	NSString *pubKey = [self publicKey];
 	// How many characters we have left
 	int lengthLeft = [pubKey length];
 	// Where we are now
@@ -213,10 +201,8 @@ static KeyController *sharedInstance = nil;
 			[fm moveItemAtPath:productPath toPath:[productPath stringByAppendingString:@".old"] error:NULL];
 	}
 	
-	if (rsaKey)
-		RSA_free(rsaKey);
-	
-	rsaKey = RSA_generate_key(1024, 3, NULL, NULL);
+	keyGenerator = [[AquaticPrime alloc] init];
+    [keyGenerator generateKeys];
 	
 	[self populateKeyView];
 	[statusController setStatus:@"Generated 1024-bit key" duration:2.5];
@@ -243,15 +229,25 @@ static KeyController *sharedInstance = nil;
 	
 	// Load the dict
 	NSDictionary *keyDict = [NSDictionary dictionaryWithContentsOfFile:productPath];
-	NSData *pubData = [keyDict objectForKey:@"Public Key"];
-	NSData *privData = [keyDict objectForKey:@"Private Key"];
-	
-	if (rsaKey)
-		RSA_free(rsaKey);
-	
-	rsaKey = RSA_new();
-	rsaKey->n = BN_bin2bn([pubData bytes], [pubData length], NULL);
-	rsaKey->d = BN_bin2bn([privData bytes], [privData length], NULL);
+    
+    // Old raw format or new PEM encoded format?
+    id pubKeyFormatUnknown = [keyDict objectForKey:@"Public Key"];
+	id privKeyFormatUnknown = [keyDict objectForKey:@"Private Key"];
+
+    NSString *pubKey = nil, *privKey = nil;
+    if ([pubKeyFormatUnknown isKindOfClass:[NSString class]] && [privKeyFormatUnknown isKindOfClass:[NSString class]]) {
+        // This is the new PEM encoded type (I'm happy to believe that and skip validation in a developer tool anyway)
+        pubKey = pubKeyFormatUnknown;
+        privKey = privKeyFormatUnknown;
+    }
+    else {
+        // This is the old format (NSData raw key). If we can convert the private key into a PEM encoded string
+        // that will move things along nicely, and we won't need to continue using the raw 1024 bit unencoded keys
+        // anymore.
+        pubKey = [pubKeyFormatUnknown hexDigitRepresentation];
+        privKey = [privKeyFormatUnknown hexDigitRepresentation];
+    }
+	keyGenerator = [AquaticPrime aquaticPrimeWithKey:pubKey privateKey:privKey];
 	
 	[self populateKeyView];
 	//[statusController setStatus:[NSString stringWithFormat:@"Loaded key for %@", productName] duration:2.5];
@@ -266,25 +262,11 @@ static KeyController *sharedInstance = nil;
 	NSString *keyDir = [supportDir stringByAppendingPathComponent:@"Product Keys"];
 	NSString *productPath = [keyDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.plist", productName]];
 	BOOL isDir;
-	NSData *pubData;
-	NSData *privData;
-	unsigned char *pubBytes;
-	unsigned char *privBytes;
-	int pubLength = BN_num_bytes(rsaKey->n);
-	int privLength = BN_num_bytes(rsaKey->d);
-	
-	// Get the bytes for each key and copy the bytes
-	pubBytes = (unsigned char*)malloc(pubLength);
-	BN_bn2bin(rsaKey->n, pubBytes);
-	privBytes = (unsigned char*)malloc(privLength);
-	BN_bn2bin(rsaKey->d, privBytes);
-	
-	// Create the NSData objects
-	pubData =  [NSData dataWithBytesNoCopy:pubBytes length:pubLength freeWhenDone:YES];
-	privData =  [NSData dataWithBytesNoCopy:privBytes length:privLength freeWhenDone:YES];
 	
 	// Create the dictionary
-	NSDictionary *keyDict = [NSDictionary dictionaryWithObjectsAndKeys: pubData, @"Public Key", privData, @"Private Key", nil];
+	NSDictionary *keyDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [keyGenerator key], @"Public Key",
+                             [keyGenerator privateKey], @"Private Key", nil];
 	
 	// The data directory doesn't exist yet
 	if (![fm fileExistsAtPath:supportDir isDirectory:&isDir])
@@ -325,8 +307,8 @@ static KeyController *sharedInstance = nil;
 	[savePanel setTitle:@"Export Keys To..."];
 	if ([savePanel runModal] == NSFileHandlingPanelCancelButton)
 		return;
-	
-	NSString *exportPath = [savePanel filename];
+
+	NSString *exportPath = [[savePanel URL] path];
 	NSFileManager *fm = [NSFileManager defaultManager];
 	NSString *productPath = [[DATADIR_PATH stringByAppendingFormat:@"/Product Keys/%@.plist", 
 															[productController currentProduct]] stringByExpandingTildeInPath];
@@ -346,7 +328,7 @@ static KeyController *sharedInstance = nil;
 	if ([selectPanel runModal] == NSFileHandlingPanelCancelButton)
 		return;
 	
-	NSString *keyPath = [[selectPanel filenames] objectAtIndex:0];
+	NSString *keyPath = [[selectPanel URL] path];
 	
 	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:keyPath];
 	if (![[dict allKeys] containsObject:@"Public Key"] || ![[dict allKeys] containsObject:@"Private Key"]) {
@@ -375,19 +357,16 @@ static KeyController *sharedInstance = nil;
 		return;
 	
 	// Read the file contents
-	NSString *keyPath = [[selectPanel filenames] objectAtIndex:0];
+	NSString *keyPath = [[selectPanel URL] path];
 	NSString *fileContent = [NSString stringWithContentsOfFile:keyPath encoding:NSASCIIStringEncoding error:nil];
 	
-	// The data is expected to be a hex string, starting with 0x.
-	fileContent = [fileContent stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-	NSString *firstTwoChars = [fileContent substringToIndex:2];
-	if (![firstTwoChars isEqualToString:@"0x"]) {
-		NSRunAlertPanel(@"Error", @"This file does not contain a hex string starting with 0x", @"OK", nil, nil);
-		return;
-	}
-	fileContent = [fileContent substringFromIndex:2]; // remove the "0x"
-	
-	BN_hex2bn (asPrivate ? &rsaKey->d : &rsaKey->n, [fileContent UTF8String]);
+	// The data is expected to be a PEM encoded file
+	if (!asPrivate) {
+        [keyGenerator setKey:fileContent];
+    }
+    else {
+        [keyGenerator setKey:[keyGenerator key] privateKey:fileContent];
+    }
 	
 	[self saveKeysForProduct:[productController currentProduct]];
 	[productController loadProducts];

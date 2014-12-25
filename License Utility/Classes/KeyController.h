@@ -27,6 +27,8 @@
 #import <Cocoa/Cocoa.h>
 #include <openssl/rsa.h>
 
+@class AquaticPrime;
+
 @interface KeyController : NSObject <NSTextViewDelegate>
 {
 	IBOutlet NSButton *generateButton;
@@ -36,7 +38,7 @@
 	IBOutlet NSTextView *privateKeyView;
 	IBOutlet NSTabView *tabView;
 	
-	RSA *rsaKey;
+	AquaticPrime *keyGenerator;
 	
 	IBOutlet id productController;
 	IBOutlet id statusController;
