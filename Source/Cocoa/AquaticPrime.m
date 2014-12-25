@@ -51,7 +51,7 @@
     _publicKeyRef = NULL;
     _privateKeyRef = NULL;
     _aqError = [[NSString alloc] init];
-    self.hash = [[NSString alloc] init];
+    self.hashString = [[NSString alloc] init];
     
     [self setKey:key privateKey:privateKey];
     
@@ -549,7 +549,7 @@
     NSString *hashCheck = [hash hexDigitRepresentation];
     
     // Store the license hash in case we need it later
-    [self setHash:hashCheck];
+	self.hashString = hashCheck;
     
     if (self.blacklist && [self.blacklist containsObject:hashCheck]) {
         cleanup();
