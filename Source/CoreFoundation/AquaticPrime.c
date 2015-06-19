@@ -240,8 +240,8 @@ CFDataRef APCreateHashFromDictionary(CFDictionaryRef dict)
     }
     
     // Sort the array
-    int context = kCFCompareCaseInsensitive;
-    CFArraySortValues(keyArray, CFRangeMake(0, count-1), (CFComparatorFunction)CFStringCompare, &context);
+    CFStringCompareFlags context = kCFCompareCaseInsensitive;
+    CFArraySortValues(keyArray, CFRangeMake(0, count-1), (CFComparatorFunction)CFStringCompare, (void*)context);
     
     
     // Build the data
