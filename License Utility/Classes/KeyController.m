@@ -403,7 +403,7 @@ static KeyController *sharedInstance = nil;
 	[self importKeyAsPrivate:YES];
 }
 
-- (NSMenu *)textView:(NSTextView *)view menu:(NSMenu *)menu forEvent:(NSEvent *)event atIndex:(NSUInteger)charIndex NS_AVAILABLE_MAC(10_5)
+- (NSMenu *)textView:(NSTextView *)view menu:(NSMenu *)menu forEvent:(NSEvent *)event atIndex:(NSUInteger)charIndex 
 {
 	if (![productController currentProduct]) {
 		// user needs to select a key pair first, then he can replace it this way
