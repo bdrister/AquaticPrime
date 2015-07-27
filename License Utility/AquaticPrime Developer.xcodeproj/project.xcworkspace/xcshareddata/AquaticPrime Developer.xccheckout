@@ -10,29 +10,29 @@
 	<string>AquaticPrime Developer</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>C8B3B41B-9C57-46B9-B1CA-CB3F2FE96F61</key>
+		<key>1294249FF98BDD8B2B61312A7FA4A54FFB4217F2</key>
 		<string>https://github.com/alfwatt/AquaticPrime.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>License Utility/AquaticPrime Developer.xcodeproj/project.xcworkspace</string>
+	<string>License Utility/AquaticPrime Developer.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>C8B3B41B-9C57-46B9-B1CA-CB3F2FE96F61</key>
+		<key>1294249FF98BDD8B2B61312A7FA4A54FFB4217F2</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/alfwatt/AquaticPrime.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>C8B3B41B-9C57-46B9-B1CA-CB3F2FE96F61</string>
+	<string>1294249FF98BDD8B2B61312A7FA4A54FFB4217F2</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>C8B3B41B-9C57-46B9-B1CA-CB3F2FE96F61</string>
+			<string>1294249FF98BDD8B2B61312A7FA4A54FFB4217F2</string>
 			<key>IDESourceControlWCCName</key>
 			<string>AquaticPrime</string>
 		</dict>
