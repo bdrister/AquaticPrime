@@ -4,3 +4,4 @@ AquaticPrime Developer.app
 *.xcuserstate
 node_modules
 Source/NodeJS/dist
+Source/PHP/aquaticprime
