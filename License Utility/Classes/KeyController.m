@@ -36,9 +36,7 @@ static KeyController *sharedInstance = nil;
 
 - (id)init
 {
-	if (sharedInstance) {
-//        [self dealloc];
-    } else {
+	if (!sharedInstance) {
         sharedInstance = [super init];
 		[[NSNotificationCenter defaultCenter] addObserver:sharedInstance selector:@selector(viewKeysForCurrentProduct) name:@"ProductSelected" object:nil];
     }
@@ -49,7 +47,6 @@ static KeyController *sharedInstance = nil;
 - (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-//	[super dealloc];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)aMenuItem
@@ -81,7 +78,6 @@ static KeyController *sharedInstance = nil;
 	
 	cString = BN_bn2hex(rsaKey->n);
 	
-//	nString = [[[NSString stringWithFormat:@"0x%s", cString] retain] autorelease];
     nString = [NSString stringWithFormat:@"0x%s", cString];
 	OPENSSL_free(cString);
 	
@@ -98,7 +94,6 @@ static KeyController *sharedInstance = nil;
 	
 	cString = BN_bn2hex(rsaKey->d);
 	
-//	nString = [[[NSString stringWithFormat:@"0x%s", cString] retain] autorelease];
     nString = [NSString stringWithFormat:@"0x%s", cString];
 	OPENSSL_free(cString);
 	

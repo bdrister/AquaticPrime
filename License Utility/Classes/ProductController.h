@@ -26,7 +26,6 @@
 
 #import <Cocoa/Cocoa.h>
 #import "OAGradientTableView.h"
-//@class OAGradientTableView;
 
 @interface ProductController : NSObject
 {

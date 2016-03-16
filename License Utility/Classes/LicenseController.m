@@ -39,9 +39,6 @@
 {
 	self = [super init];
 	if(self) {
-//		keyArray = [[NSMutableArray array] retain];
-//		valueArray = [[NSMutableArray array] retain];
-		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(newProductSelected) name:@"ProductSelected" object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveLicenseTemplate:) name:@"ProductWillBeSelected" object:nil];
 	}
@@ -51,11 +48,7 @@
  
 - (void)dealloc
 {
-//	[keyArray release];
-//	[valueArray release];
-	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-//	[super dealloc];
 }
 
 #pragma mark License Generation
@@ -182,9 +175,6 @@
 	}
 	
 	NSDictionary *templateDict = [NSDictionary dictionaryWithContentsOfFile:productPath];
-//	keyArray = [[NSMutableArray arrayWithArray:[templateDict objectForKey:@"Keys"]] retain];
-//	valueArray = [[NSMutableArray arrayWithArray:[templateDict objectForKey:@"Values"]] retain];
-
     keyArray = [NSMutableArray arrayWithArray:[templateDict objectForKey:@"Keys"]];
     valueArray = [NSMutableArray arrayWithArray:[templateDict objectForKey:@"Values"]];
 
@@ -201,11 +191,6 @@
 
 - (void)newProductSelected
 {
-//	if (keyArray)
-//		[keyArray release];
-//	if (valueArray)
-//		[valueArray release];
-		
 	// Enable everything except the remove button
 	[addButton setEnabled:YES];
 	[generateLicenseButton setEnabled:YES];
@@ -215,8 +200,6 @@
 	// No template and a product, i.e. new product
 	if (![self loadLicenseTemplate] && [productController currentProduct]) {
 		// Default values
-//		keyArray = [[NSMutableArray arrayWithObjects:@"Name", @"Email", nil] retain];
-//		valueArray = [[NSMutableArray arrayWithObjects:@"User", @"user@email.com", nil] retain];
         keyArray = [NSMutableArray arrayWithObjects:@"Name", @"Email", nil] ;
         valueArray = [NSMutableArray arrayWithObjects:@"User", @"user@email.com", nil];
 
@@ -233,8 +216,6 @@
 		[licenseExtensionField setStringValue:@""];
 		[saveDirectoryField setStringValue:@""];
 		
-//		keyArray = [[NSMutableArray array] retain];
-//		valueArray = [[NSMutableArray array] retain];
         keyArray = [NSMutableArray array];
         valueArray = [NSMutableArray array];
 
@@ -305,13 +286,7 @@
 {
 	[keyArray removeObjectAtIndex:row];
 	[valueArray removeObjectAtIndex:row];
-	
-	// Make sure we don't lose a reference to the arrays
-//	if ([keyArray count] == 0)
-//		[keyArray retain];
-//	if ([valueArray count] == 0)
-//		[valueArray retain];
-	
+		
 	[keyValueTable reloadData];
 	[keyValueTable selectRowIndexes:[NSIndexSet indexSetWithIndex:row-1] byExtendingSelection:NO];
 	
