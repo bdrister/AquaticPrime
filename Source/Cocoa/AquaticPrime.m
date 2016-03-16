@@ -45,13 +45,13 @@
 	if (![super init])
 		return nil;
 	
-	aqError = [[NSString alloc] init];
-	blacklist = [[NSArray alloc] init];
-	hash = [[NSString alloc] init];
+    aqError = [[NSString alloc] init];
+    blacklist = [[NSArray alloc] init];
+    hash = [[NSString alloc] init];
     rsaKey = nil;
-	
-	[self setKey:key privateKey:privateKey];
-	
+    
+    [self setKey:key privateKey:privateKey];
+    
 	return self;
 }
 
@@ -62,21 +62,23 @@
 	if (rsaKey)
 		RSA_free(rsaKey);
 
-	[blacklist release];
-	[aqError release];
-	[hash release];
-	
-	[super dealloc];
+//	[blacklist release];
+//	[aqError release];
+//	[hash release];
+//	
+//	[super dealloc];
 }
 
 + (id)aquaticPrimeWithKey:(NSString *)key privateKey:(NSString *)privateKey
 {
-	return [[[AquaticPrime alloc] initWithKey:key privateKey:privateKey] autorelease];
+	//return [[[AquaticPrime alloc] initWithKey:key privateKey:privateKey] autorelease];
+    return [[AquaticPrime alloc] initWithKey:key privateKey:privateKey] ;
 }
 
 + (id)aquaticPrimeWithKey:(NSString *)key
 {
-	return [[[AquaticPrime alloc] initWithKey:key privateKey:nil] autorelease];
+	//return [[[AquaticPrime alloc] initWithKey:key privateKey:nil] autorelease];
+    return [[AquaticPrime alloc] initWithKey:key privateKey:nil];
 }
 
 - (BOOL)setKey:(NSString *)key 
@@ -138,7 +140,8 @@
 	NSString *nString = [[NSString alloc] initWithUTF8String:cString];
 	OPENSSL_free(cString);
 	
-	return [nString autorelease];
+//	return [nString autorelease];
+    return nString;
 }
 
 - (NSString *)privateKey
@@ -151,13 +154,15 @@
 	NSString *dString = [[NSString alloc] initWithUTF8String:cString];
 	OPENSSL_free(cString);
 	
-	return [dString autorelease];
+//	return [dString autorelease];
+    return dString;
 }
 
 - (void)setHash:(NSString *)newHash
 {
-	[hash release];
-	hash = [newHash retain];
+//	[hash release];
+//	hash = [newHash retain];
+    hash = newHash;
 }
 
 - (NSString *)hash
@@ -170,8 +175,9 @@
 // This array should contain a list of NSStrings representing hexadecimal hashcodes for blacklisted licenses
 - (void)setBlacklist:(NSArray*)hashArray
 {
-	[blacklist release];
-	blacklist = [hashArray retain];
+//	[blacklist release];
+//	blacklist = [hashArray retain];
+    blacklist = hashArray;
 }
 
 #pragma mark Signing
@@ -357,8 +363,10 @@
 
 - (void)_setError:(NSString *)err
 {
-	[aqError release];
-	aqError = [err retain];
+//	[aqError release];
+//	aqError = [err retain];
+    
+    aqError = err;
 }
 
 @end
