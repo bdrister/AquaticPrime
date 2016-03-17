@@ -119,11 +119,11 @@
 		licenseDictionary = [licenseChecker dictionaryForLicenseFile:licensePath];
 		
 		if (licenseDictionary) {
-			keyInfoArray = [[licenseDictionary allKeys] retain];
-			valueInfoArray = [[licenseDictionary allValues] retain];
+            keyInfoArray = [licenseDictionary allKeys];
+            valueInfoArray = [licenseDictionary allValues];
 			hash = (NSString *)[licenseChecker hash];
 			isLicenseValid = YES;
-			licenseValidForProduct = [currentProduct retain];
+            licenseValidForProduct = currentProduct;
 			return YES;
 		}
 	}
@@ -131,9 +131,8 @@
 	// At this point, the license is invalid, but we show the key-value pairs anyway
 	NSMutableDictionary *badLicenseDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:licensePath];
 	[badLicenseDictionary removeObjectForKey:@"Signature"];
-	keyInfoArray = [[NSArray arrayWithArray:[badLicenseDictionary allKeys]] retain];
-	valueInfoArray = [[NSArray arrayWithArray:[badLicenseDictionary allValues]] retain];
-	
+    keyInfoArray = [NSArray arrayWithArray:[badLicenseDictionary allKeys]];
+    valueInfoArray = [NSArray arrayWithArray:[badLicenseDictionary allValues]];
 	return YES;
 }
 
