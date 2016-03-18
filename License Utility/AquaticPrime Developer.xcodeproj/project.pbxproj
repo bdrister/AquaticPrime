@@ -54,6 +54,7 @@
 		25C22E75108E664700D1D72F /* AquaticPrime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AquaticPrime.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		2D9429E71C9A4B220077AA72 /* AquaticPrime Developer.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "AquaticPrime Developer.xcconfig"; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* AquaticPrimeDeveloper_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AquaticPrimeDeveloper_Prefix.pch; sourceTree = "<group>"; };
 		3D12D14A085206240035BA78 /* add.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = add.tiff; sourceTree = "<group>"; };
 		3D12D157085208CC0035BA78 /* StatusController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = StatusController.h; sourceTree = "<group>"; };
@@ -156,6 +157,7 @@
 			children = (
 				32CA4F630368D1EE00C91783 /* AquaticPrimeDeveloper_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
+				2D9429E71C9A4B220077AA72 /* AquaticPrime Developer.xcconfig */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -423,7 +425,6 @@
 				GCC_PREFIX_HEADER = AquaticPrimeDeveloper_Prefix.pch;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = /Users/jaimerios/Perforce/jaimerios_Atlas_dev_2_0_projects_mac_v_MBP/lib/openssl/mac/include;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -455,7 +456,6 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_PKGINFO_FILE = NO;
-				HEADER_SEARCH_PATHS = /Users/jaimerios/Perforce/jaimerios_Atlas_dev_2_0_projects_mac_v_MBP/lib/openssl/mac/include;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -481,7 +481,6 @@
 				GCC_PREFIX_HEADER = AquaticPrimeDeveloper_Prefix.pch;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = /Users/jaimerios/Perforce/jaimerios_Atlas_dev_2_0_projects_mac_v_MBP/lib/openssl/mac/include;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -497,6 +496,7 @@
 		};
 		3D9363D708565C58006F1864 /* Development */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2D9429E71C9A4B220077AA72 /* AquaticPrime Developer.xcconfig */;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -506,6 +506,7 @@
 		};
 		3D9363D808565C58006F1864 /* Deployment */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2D9429E71C9A4B220077AA72 /* AquaticPrime Developer.xcconfig */;
 			buildSettings = {
 				SDKROOT = macosx;
 			};
@@ -513,6 +514,7 @@
 		};
 		3D9363D908565C58006F1864 /* Default */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2D9429E71C9A4B220077AA72 /* AquaticPrime Developer.xcconfig */;
 			buildSettings = {
 				SDKROOT = macosx;
 			};

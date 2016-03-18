@@ -102,7 +102,7 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, _linearColorBlend
     NSUInteger rowIndex = [selectedRowIndexes indexGreaterThanOrEqualToIndex:0];
 
     while (rowIndex != NSNotFound) {
-        unsigned int endOfCurrentRunRowIndex, newRowIndex = rowIndex;
+        NSUInteger endOfCurrentRunRowIndex = 0, newRowIndex = rowIndex;
         do {
             endOfCurrentRunRowIndex = newRowIndex;
             newRowIndex = [selectedRowIndexes indexGreaterThanIndex:endOfCurrentRunRowIndex];
