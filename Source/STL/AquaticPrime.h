@@ -24,11 +24,9 @@
 // IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT 
 // OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <openssl/rsa.h>
-#include <openssl/sha.h>
 #include <string>
 #include <map>
-#include <list>
+#include <vector>
 
 // Set the key - must be called first
 bool APSetKey(std::string key);
@@ -41,5 +39,5 @@ bool APVerifyLicenseFile(std::string path);
 
 std::string APHash(void);
 void APBlacklistAdd(std::string blacklistEntry);
-void APSetBlacklist(std::list<std::string> hashArray);
+void APSetBlacklist(std::vector<std::string> hashArray);
 
