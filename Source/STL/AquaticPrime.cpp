@@ -25,13 +25,18 @@
 // OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AquaticPrime.h"
-#include "tinyxml.h"
+#include "tinyxml2.h"
+#include <openssl/rsa.h>
+#include <openssl/sha.h>
 #include <stdarg.h>
-#include <b64/b64.h>
+
+extern "C" {
+	#include <b64/b64.h>
+}
 
 static RSA *rsaKey;
 static std::string hash;
-static std::list<std::string> blacklist;
+static std::vector<std::string> blacklist;
 
 // utilities
 inline char ToLower(char in)
@@ -89,7 +94,7 @@ void APSetHash(std::string newHash)
 }
 
 // Set the entire blacklist array, removing any existing entries
-void APSetBlacklist(std::list<std::string> hashArray)
+void APSetBlacklist(std::vector<std::string> hashArray)
 {
 	blacklist = hashArray;
 }
@@ -120,7 +125,7 @@ std::map<std::string, std::string> APCreateDictionaryForLicenseData(std::map<std
 	}
 	else 
 	{
-		int returnVal = b64::b64_decode(data["Signature"].c_str(), data["Signature"].length(), sigBytes, 129);	
+		int returnVal = b64decode(data["Signature"].c_str(), data["Signature"].length(), sigBytes, 129);
 		
 		if(returnVal == 0)
 		{
@@ -151,7 +156,7 @@ std::map<std::string, std::string> APCreateDictionaryForLicenseData(std::map<std
 	if (blacklist.size() > 0)
 	{
 		// $$ is this right?
-		for(std::list<std::string>::iterator b = blacklist.begin(); b != blacklist.end(); ++b)
+		for(auto b = blacklist.begin(); b != blacklist.end(); ++b)
 		{
 			if(data.find((*b)) != data.end())
 			{
@@ -163,16 +168,15 @@ std::map<std::string, std::string> APCreateDictionaryForLicenseData(std::map<std
 	}
 	
 	// Get the number of elements
-	int count = data.size();
+	const size_t count = data.size();
 	// Load the keys and build up the key array
 //	std::list<std::string> keyArray;
-	std::string keys[count];
+//	std::string keys[count];
+	std::vector<std::string> keys;
 	
-	int counter = 0;
-	for(std::map<std::string, std::string>::iterator d = data.begin(); d != data.end(); ++d)
+	for(auto d = data.begin(); d != data.end(); ++d)
 	{
-		keys[counter] = (*d).first;
-		++counter;
+		keys.push_back((*d).first);
 	}
 	
 	// Sort the array ( $$ why?  for cleanliness reasons? )
@@ -213,13 +217,13 @@ std::map<std::string, std::string> APCreateDictionaryForLicenseFile(std::string 
 {
 	std::map<std::string, std::string> xmlData;
 	
-	TiXmlNode *node = 0;
-	TiXmlDocument licenseFile(path.c_str());
-	licenseFile.LoadFile();
+	tinyxml2::XMLNode *node = 0;
+	tinyxml2::XMLDocument licenseFile;
+	licenseFile.LoadFile(path.c_str());
 	
-	node = licenseFile.FirstChild("plist");
+	node = licenseFile.FirstChildElement("plist");
 	if(node == NULL) return xmlData;
-	node = node->FirstChild("dict");
+	node = node->FirstChildElement("dict");
 	if(node == NULL) return xmlData;
 	
 	do
@@ -228,7 +232,7 @@ std::map<std::string, std::string> APCreateDictionaryForLicenseFile(std::string 
 		if(std::string(node->ToElement()->Value()) == std::string("dict"))
 		{
 			std::string key, data;
-			TiXmlNode *innerNode = node->FirstChild();
+			tinyxml2::XMLNode *innerNode = node->FirstChild();
 			while(innerNode != NULL)
 			{				
 				// <key>
@@ -258,7 +262,7 @@ std::map<std::string, std::string> APCreateDictionaryForLicenseFile(std::string 
 								spaces.push_back(d);
 						}
 
-						for(uint s=0; s < spaces.size(); ++s)
+						for(size_t s = 0; s < spaces.size(); ++s)
 							data.erase(spaces[s] - (s));
 					}
 					
