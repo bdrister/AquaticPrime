@@ -30,7 +30,7 @@
 
 #include "AquaticPrime.h"
 #include <Security/Security.h>
-
+#import <sys/stat.h>
 
 static SecKeyRef publicKeyRef;
 static __strong CFStringRef hash;
@@ -246,7 +246,7 @@ CFDataRef APCreateHashFromDictionary(CFDictionaryRef dict)
     
     // Build the data
     CFMutableDataRef dictData = CFDataCreateMutable(kCFAllocatorDefault, 0);
-    int keyCount = CFArrayGetCount(keyArray);
+    long keyCount = CFArrayGetCount(keyArray);
     for (int keyIndex = 0; keyIndex < keyCount; keyIndex++)
     {
         CFStringRef key = CFArrayGetValueAtIndex(keyArray, keyIndex);
@@ -359,7 +359,26 @@ CFDictionaryRef APCreateDictionaryForLicenseData(CFDataRef data)
     
     // Make the property list from the data
     CFStringRef errorString = NULL;
-    propertyList = CFPropertyListCreateFromXMLData(kCFAllocatorDefault, data, kCFPropertyListMutableContainers, &errorString);
+#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11)
+    propertyList = CFPropertyListCreateWithData(kCFAllocatorDefault,
+                                                data,
+                                                kCFPropertyListMutableContainers,
+                                                NULL,
+                                                &error);
+    
+    if (error != NULL)
+    {
+        CFShow(error);
+        CFRelease(error);
+        error = NULL;
+    }
+#else
+    propertyList = CFPropertyListCreateFromXMLData(kCFAllocatorDefault,
+                                                   data,
+                                                   kCFPropertyListMutableContainers,
+                                                   &errorString);
+#endif
+    
     if (errorString || CFDictionaryGetTypeID() != CFGetTypeID(propertyList) || !CFPropertyListIsValid(propertyList, kCFPropertyListXMLFormat_v1_0)) {
         if (propertyList)
             CFRelease(propertyList);
@@ -430,19 +449,81 @@ CFDictionaryRef APCreateDictionaryForLicenseData(CFDataRef data)
     return resultDict;
 }
 
+long long GetFileSize(CFURLRef fileURL)
+{
+    const long long failed = -1;
+    
+    UInt8 filePath[PATH_MAX];
+    Boolean pathConvert = CFURLGetFileSystemRepresentation(fileURL, false, filePath, PATH_MAX);
+    
+    if(pathConvert == false)
+    {
+        return failed;
+    }
+    
+    struct stat stat1;
+    const char* cFilePath = (const char*)filePath;
+    if( stat(cFilePath, &stat1) )
+    {
+        return failed;
+    }
+    
+    const long long fileSize = stat1.st_size;
+    
+    return fileSize;
+}
+
 CFDictionaryRef APCreateDictionaryForLicenseFile(CFURLRef path)
 {
     // Read the XML file
-    CFDataRef data;
+    CFDataRef data = NULL;
+#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10)
+    CFReadStreamRef fileStream = CFReadStreamCreateWithFile(NULL, path);
+    if (fileStream)
+    {
+        if (CFReadStreamOpen(fileStream))
+        {
+            CFIndex bufferLength = GetFileSize(path);
+            
+            if (bufferLength > 0)
+            {
+                UInt8* dataBytes = malloc(bufferLength);
+                if (dataBytes)
+                {
+                    CFIndex bytesRead = CFReadStreamRead(fileStream, dataBytes, bufferLength);
+                    if (bytesRead > 0)
+                    {
+                        data = CFDataCreate(kCFAllocatorDefault, dataBytes, bytesRead);
+                    }
+                    
+                    free(dataBytes);
+                    dataBytes = NULL;
+                }        
+            }
+            
+            CFReadStreamClose(fileStream);
+        }
+        
+        CFRelease(fileStream);
+        fileStream = NULL;
+    }
+    
+    
+#else
     SInt32 errorCode;
     Boolean status;
     status = CFURLCreateDataAndPropertiesFromResource(kCFAllocatorDefault, path, &data, NULL, NULL, &errorCode);
     
     if (errorCode || status != true)
         return NULL;
+#endif
     
     CFDictionaryRef licenseDictionary = APCreateDictionaryForLicenseData(data);
-    CFRelease(data);
+    if(data != NULL)
+    {
+        CFRelease(data);
+        data = NULL;
+    }
     return licenseDictionary;
 }
 
