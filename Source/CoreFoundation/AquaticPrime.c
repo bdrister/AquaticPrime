@@ -30,7 +30,7 @@
 
 #include "AquaticPrime.h"
 #include <Security/Security.h>
-#import <sys/stat.h>
+#include <sys/stat.h>
 
 static SecKeyRef publicKeyRef;
 static __strong CFStringRef hash;
