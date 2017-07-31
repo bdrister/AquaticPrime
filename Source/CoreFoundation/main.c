@@ -49,6 +49,7 @@ const char* pemEncodedKey =
 
 
 void testValidLicenseFile(void);
+void test2ValidLicenseFile();
 void testInvalidLicenseFile(void);
 void testValidPemKey(void);
 
@@ -127,6 +128,7 @@ int main (int argc, const char * argv[]) {
 	// Tests
 	CFShow(CFSTR("\n\n-----\n"));
 	testValidLicenseFile();
+    test2ValidLicenseFile();
 	testInvalidLicenseFile();
 	testValidPemKey();
 	
@@ -147,6 +149,39 @@ void testValidLicenseFile(void)
 	} else {
 		CFShow(CFSTR("Test FAILED: Valid file not recognised as valid"));
 	}
+}
+
+void test2ValidLicenseFile()
+{
+    CFStringRef filePath = CFStringCreateWithFileSystemRepresentation(kCFAllocatorDefault,
+                                                                      "/Users/jaimerios/Development/Personal/AquaticPrime/Source/CoreFoundation/ValidLicenseFile.aplic");
+    CFURLRef fileURL = CFURLCreateWithFileSystemPath(kCFAllocatorDefault,
+                                                     filePath,
+                                                     kCFURLPOSIXPathStyle,
+                                                     false);
+    
+    Boolean licenseIsValid = APVerifyLicenseFile(fileURL);
+    
+    if (licenseIsValid)
+    {
+        CFShow(CFSTR("Test OK: Valid file on disk recognised as valid"));
+    }
+    else
+    {
+        CFShow(CFSTR("Test FAILED: Valid file file on disk not recognised as valid"));
+    }
+    
+    if (filePath != NULL)
+    {
+        CFRelease(filePath);
+        filePath = NULL;
+    }
+    
+    if (fileURL != NULL)
+    {
+        CFRelease(fileURL);
+        fileURL = NULL;
+    }
 }
 
 void testInvalidLicenseFile(void)

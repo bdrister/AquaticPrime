@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+<key>Email</key>
+<string>user@email.com</string>
+<key>Name</key>
+<string>User</string>
+<key>Signature</key>
+<data>
+NTJhJuyTKG6N+Na+9kHSU+sGXotAa5nR2mgZbPfUQJpFYk7uUh8OxWx2+gHwMPTfeCkx
+8/Z+Q99104r/b0URZZd/av3ymKkciKsNcK+9XHb3uW+SUg9MxmEb1Yhl3VaM+I3x83WV
+xzGvn7kSfRF7/RVwH1+nWSo4CXH9A0ei7vM=
+</data>
+</dict>
+</plist>

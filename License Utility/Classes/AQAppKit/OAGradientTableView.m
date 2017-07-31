@@ -16,11 +16,11 @@
 */
 
 typedef struct {
-    float red1, green1, blue1, alpha1;
-    float red2, green2, blue2, alpha2;
+    CGFloat red1, green1, blue1, alpha1;
+    CGFloat red2, green2, blue2, alpha2;
 } _twoColorsType;
 
-static void _linearColorBlendFunction(void *info, const float *in, float *out)
+static void _linearColorBlendFunction(void *info, const CGFloat *in, CGFloat *out)
 {
     _twoColorsType *twoColors = info;
     
@@ -70,9 +70,12 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, _linearColorBlend
 - (void)highlightSelectionInClipRect:(NSRect)rect;
 {
     // Take the color apart
+    CGFloat hue = 0.0f, saturation = 0.0f, brightness = 0.0f, alpha = 0.0f;
+
     NSColor *alternateSelectedControlColor = [NSColor alternateSelectedControlColor];
-    float hue, saturation, brightness, alpha;
-    [[alternateSelectedControlColor colorUsingColorSpaceName:NSDeviceRGBColorSpace] getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
+    NSColor* tempColorspace                = [alternateSelectedControlColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
+
+    [tempColorspace getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
 
     // Create synthetic darker and lighter versions
     // NSColor *lighterColor = [NSColor colorWithDeviceHue:hue - (1.0/120.0) saturation:MAX(0.0, saturation-0.12) brightness:MIN(1.0, brightness+0.045) alpha:alpha];
@@ -81,7 +84,8 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, _linearColorBlend
     
     // If this view isn't key, use the gray version of the dark color. Note that this varies from the standard gray version that NSCell returns as its highlightColorWithFrame: when the cell is not in a key view, in that this is a lot darker. Mike and I think this is justified for this kind of view -- if you're using the dark selection color to show the selected status, it makes sense to leave it dark.
     if ([[self window] firstResponder] != self || ![[self window] isKeyWindow]) {
-        alternateSelectedControlColor = [[alternateSelectedControlColor colorUsingColorSpaceName:NSDeviceWhiteColorSpace] colorUsingColorSpaceName:NSDeviceRGBColorSpace];
+        NSColor* tempColor = [alternateSelectedControlColor colorUsingColorSpaceName:NSDeviceWhiteColorSpace];
+        alternateSelectedControlColor = [tempColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
         lighterColor = [[lighterColor colorUsingColorSpaceName:NSDeviceWhiteColorSpace] colorUsingColorSpaceName:NSDeviceRGBColorSpace];
         darkerColor = [[darkerColor colorUsingColorSpaceName:NSDeviceWhiteColorSpace] colorUsingColorSpaceName:NSDeviceRGBColorSpace];
     }
@@ -91,14 +95,14 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, _linearColorBlend
     _twoColorsType *twoColors = malloc(sizeof(_twoColorsType)); // We malloc() the helper data because we may draw this wash during printing, in which case it won't necessarily be evaluated immediately. We need for all the data the shading function needs to draw to potentially outlive us.
     [lighterColor getRed:&twoColors->red1 green:&twoColors->green1 blue:&twoColors->blue1 alpha:&twoColors->alpha1];
     [darkerColor getRed:&twoColors->red2 green:&twoColors->green2 blue:&twoColors->blue2 alpha:&twoColors->alpha2];
-    static const float domainAndRange[8] = {0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0};
+    static const CGFloat domainAndRange[8] = {0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0};
     CGFunctionRef linearBlendFunctionRef = CGFunctionCreate(twoColors, 1, domainAndRange, 4, domainAndRange, &linearFunctionCallbacks);
     
     NSIndexSet *selectedRowIndexes = [self selectedRowIndexes];
-    unsigned int rowIndex = [selectedRowIndexes indexGreaterThanOrEqualToIndex:0];
+    NSUInteger rowIndex = [selectedRowIndexes indexGreaterThanOrEqualToIndex:0];
 
     while (rowIndex != NSNotFound) {
-        unsigned int endOfCurrentRunRowIndex, newRowIndex = rowIndex;
+        NSUInteger endOfCurrentRunRowIndex = 0, newRowIndex = rowIndex;
         do {
             endOfCurrentRunRowIndex = newRowIndex;
             newRowIndex = [selectedRowIndexes indexGreaterThanIndex:endOfCurrentRunRowIndex];
@@ -115,13 +119,13 @@ static const CGFunctionCallbacks linearFunctionCallbacks = {0, _linearColorBlend
 
         // Draw a soft wash underneath it
         CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
-        CGContextSaveGState(context); {
+        CGContextSaveGState(context);
+        {
             CGContextClipToRect(context, (CGRect){{NSMinX(washRect), NSMinY(washRect)}, {NSWidth(washRect), NSHeight(washRect)}});
             CGShadingRef cgShading = CGShadingCreateAxial(colorSpace, CGPointMake(0, NSMinY(washRect)), CGPointMake(0, NSMaxY(washRect)), linearBlendFunctionRef, NO, NO);
             CGContextDrawShading(context, cgShading);
             CGShadingRelease(cgShading);
         } CGContextRestoreGState(context);
-
         rowIndex = newRowIndex;
     }
 

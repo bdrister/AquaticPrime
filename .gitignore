@@ -2,6 +2,6 @@ AquaticPrime Developer.app
 .DS_Store
 .idea
 *.xcuserstate
-*.xcuserdatad
+project.xcworkspace
 node_modules
 Source/NodeJS/dist

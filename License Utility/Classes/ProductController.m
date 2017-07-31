@@ -36,7 +36,7 @@
 {
 	self = [super init];
 	if(self) {
-		productArray = [[[NSMutableArray alloc] init] retain];
+		productArray = [[NSMutableArray alloc] init];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadProducts) name:@"NewKeyGenerated" object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveProducts:) name:@"NSApplicationWillTerminateNotification" object:nil];
 	}
@@ -46,9 +46,7 @@
 
 - (void)dealloc
 {
-	[productArray release];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[super dealloc];
 }
 
 - (void)awakeFromNib
