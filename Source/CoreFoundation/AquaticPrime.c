@@ -33,8 +33,8 @@
 #include <sys/stat.h>
 
 static SecKeyRef publicKeyRef;
-static __strong CFStringRef hash;
-static __strong CFMutableArrayRef blacklist;
+static CFStringRef hash;
+static CFMutableArrayRef blacklist;
 
 static void APSetHash(CFStringRef newHash);
 static CFStringRef APPEMKeyCreateFromHexKey(CFStringRef hexKey);
