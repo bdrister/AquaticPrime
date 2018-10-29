@@ -379,7 +379,7 @@ CFDictionaryRef APCreateDictionaryForLicenseData(CFDataRef data)
                                                    &errorString);
 #endif
     
-    if (errorString || CFDictionaryGetTypeID() != CFGetTypeID(propertyList) || !CFPropertyListIsValid(propertyList, kCFPropertyListXMLFormat_v1_0)) {
+    if (errorString || !CFPropertyListIsValid(propertyList, kCFPropertyListXMLFormat_v1_0) || CFDictionaryGetTypeID() != CFGetTypeID(propertyList)) {
         if (propertyList)
             CFRelease(propertyList);
         return NULL;
