@@ -29,6 +29,7 @@
 #include <openssl/rsa.h>
 #include <openssl/sha.h>
 #include <stdarg.h>
+#include <algorithm>
 
 extern "C" {
 	#include <b64/b64.h>
