@@ -29,6 +29,7 @@
 #include <openssl/rsa.h>
 #include <openssl/sha.h>
 #include <stdarg.h>
+#include <algorithm>
 
 extern "C" {
 	#include <b64/b64.h>
@@ -62,9 +63,12 @@ bool APSetKey(std::string key)
 	
 	// Create a new key
     rsaKey = RSA_new();
-    
-    // Public exponent is always 3
-	BN_hex2bn(&rsaKey->e, "3");
+
+	BIGNUM * e = BN_new();
+	BIGNUM * n = BN_new();
+
+	// Public exponent is always 3
+	BN_hex2bn(&e, "3");
 	
 	std::string mutableKey = key;
     
@@ -73,13 +77,20 @@ bool APSetKey(std::string key)
 	if(std::string(mutableKey, 0, 2) == "0x")
 	{
 		mutableKey = std::string(mutableKey, 2, mutableKey.length());
-		BN_hex2bn(&rsaKey->n, mutableKey.c_str());
+		BN_hex2bn(&n, mutableKey.c_str());
 	}
 	else 
 	{
-		BN_dec2bn(&rsaKey->n, mutableKey.c_str());
+		BN_dec2bn(&n, mutableKey.c_str());
 	}
-	
+
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+	rsaKey->n = n;
+	rsaKey->e = e;
+#else
+	RSA_set0_key(rsaKey, n, e, nullptr);
+#endif
+
 	return true;
 }
 
@@ -106,7 +117,18 @@ void APBlacklistAdd(std::string blacklistEntry)
 
 std::map<std::string, std::string> APCreateDictionaryForLicenseData(std::map<std::string, std::string> data)
 {
-	if (!rsaKey->n || !rsaKey->e)
+	const BIGNUM * n = nullptr;
+	const BIGNUM * e = nullptr;
+
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+	n = rsaKey->n;
+	e = rsaKey->e;
+#else
+	const BIGNUM * d = nullptr;
+	RSA_get0_key(rsaKey, &n, &e, &d);
+#endif
+
+	if (!n || !e)
 	{
 		std::map<std::string, std::string> empty;
 		printf("0\n");
