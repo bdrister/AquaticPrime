@@ -27,6 +27,7 @@
 		3DD108F40881725A00C4C6B4 /* About.nib in Resources */ = {isa = PBXBuildFile; fileRef = 3DD108F30881725A00C4C6B4 /* About.nib */; };
 		3DD108F80881726E00C4C6B4 /* AboutController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DD108F60881726E00C4C6B4 /* AboutController.m */; };
 		3DF60B9E085CE0BD004C50F2 /* remove.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 3DF60B9D085CE0BD004C50F2 /* remove.tiff */; };
+		899741C229F2ED141CFDB907 /* Pods_AquaticPrimeDeveloper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77234C80B8AE28BBEF05C586 /* Pods_AquaticPrimeDeveloper.framework */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -85,9 +86,13 @@
 		3DD108F50881726E00C4C6B4 /* AboutController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AboutController.h; sourceTree = "<group>"; };
 		3DD108F60881726E00C4C6B4 /* AboutController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AboutController.m; sourceTree = "<group>"; };
 		3DF60B9D085CE0BD004C50F2 /* remove.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = remove.tiff; sourceTree = "<group>"; };
+		5E5D48C4740767EE6970FF0E /* Pods-AquaticPrimeDeveloper.deployment.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AquaticPrimeDeveloper.deployment.xcconfig"; path = "Target Support Files/Pods-AquaticPrimeDeveloper/Pods-AquaticPrimeDeveloper.deployment.xcconfig"; sourceTree = "<group>"; };
+		77234C80B8AE28BBEF05C586 /* Pods_AquaticPrimeDeveloper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AquaticPrimeDeveloper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* AquaticPrime Developer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AquaticPrime Developer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0DA7A7409B3B3AA00673D39 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		A7BFE121BD4F9642FCAAEB41 /* Pods-AquaticPrimeDeveloper.default.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AquaticPrimeDeveloper.default.xcconfig"; path = "Target Support Files/Pods-AquaticPrimeDeveloper/Pods-AquaticPrimeDeveloper.default.xcconfig"; sourceTree = "<group>"; };
+		DC0BC701BCBB086E2917413A /* Pods-AquaticPrimeDeveloper.development.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AquaticPrimeDeveloper.development.xcconfig"; path = "Target Support Files/Pods-AquaticPrimeDeveloper/Pods-AquaticPrimeDeveloper.development.xcconfig"; sourceTree = "<group>"; };
 		E804BCA50833AAFD00512005 /* KeyController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = KeyController.h; sourceTree = "<group>"; };
 		E804BCA60833AAFD00512005 /* KeyController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = KeyController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -98,6 +103,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0DA7A7509B3B3AA00673D39 /* Cocoa.framework in Frameworks */,
+				899741C229F2ED141CFDB907 /* Pods_AquaticPrimeDeveloper.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -148,6 +154,7 @@
 				3D12D149085206240035BA78 /* Images */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				42B40BE0CF567E6BDA6C1A5F /* Pods */,
 			);
 			name = AquaticPrimeDeveloper;
 			sourceTree = "<group>";
@@ -178,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				A0DA7A7409B3B3AA00673D39 /* Cocoa.framework */,
+				77234C80B8AE28BBEF05C586 /* Pods_AquaticPrimeDeveloper.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -299,6 +307,16 @@
 			name = About;
 			sourceTree = "<group>";
 		};
+		42B40BE0CF567E6BDA6C1A5F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DC0BC701BCBB086E2917413A /* Pods-AquaticPrimeDeveloper.development.xcconfig */,
+				5E5D48C4740767EE6970FF0E /* Pods-AquaticPrimeDeveloper.deployment.xcconfig */,
+				A7BFE121BD4F9642FCAAEB41 /* Pods-AquaticPrimeDeveloper.default.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -306,6 +324,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3D9363D208565C58006F1864 /* Build configuration list for PBXNativeTarget "AquaticPrimeDeveloper" */;
 			buildPhases = (
+				6E07FF016BA09626AF34251C /* [CP] Check Pods Manifest.lock */,
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
@@ -340,6 +359,7 @@
 				German,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* AquaticPrimeDeveloper */;
+			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -367,6 +387,31 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6E07FF016BA09626AF34251C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AquaticPrimeDeveloper-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8D11072C0486CEB800E47090 /* Sources */ = {
@@ -414,6 +459,7 @@
 /* Begin XCBuildConfiguration section */
 		3D9363D308565C58006F1864 /* Development */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DC0BC701BCBB086E2917413A /* Pods-AquaticPrimeDeveloper.development.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -425,6 +471,7 @@
 				GCC_PREFIX_HEADER = AquaticPrimeDeveloper_Prefix.pch;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "\"${PODS_ROOT}/OpenSSL-Universal/macos/include\"";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -440,6 +487,7 @@
 		};
 		3D9363D408565C58006F1864 /* Deployment */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5E5D48C4740767EE6970FF0E /* Pods-AquaticPrimeDeveloper.deployment.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -456,6 +504,7 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_PKGINFO_FILE = NO;
+				HEADER_SEARCH_PATHS = "\"${PODS_ROOT}/OpenSSL-Universal/macos/include\"";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -473,6 +522,7 @@
 		};
 		3D9363D508565C58006F1864 /* Default */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A7BFE121BD4F9642FCAAEB41 /* Pods-AquaticPrimeDeveloper.default.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -481,6 +531,7 @@
 				GCC_PREFIX_HEADER = AquaticPrimeDeveloper_Prefix.pch;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "\"${PODS_ROOT}/OpenSSL-Universal/macos/include\"";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -499,6 +550,7 @@
 			baseConfigurationReference = 2D9429E71C9A4B220077AA72 /* AquaticPrime Developer.xcconfig */;
 			buildSettings = {
 				ENABLE_TESTABILITY = YES;
+				HEADER_SEARCH_PATHS = "";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -508,6 +560,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2D9429E71C9A4B220077AA72 /* AquaticPrime Developer.xcconfig */;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = "";
 				SDKROOT = macosx;
 			};
 			name = Deployment;
@@ -516,6 +569,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2D9429E71C9A4B220077AA72 /* AquaticPrime Developer.xcconfig */;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = "";
 				SDKROOT = macosx;
 			};
 			name = Default;
