@@ -33,8 +33,8 @@
 #include <sys/stat.h>
 
 static SecKeyRef publicKeyRef;
-static __strong CFStringRef hash;
-static __strong CFMutableArrayRef blacklist;
+static CFStringRef hash;
+static CFMutableArrayRef blacklist;
 
 static void APSetHash(CFStringRef newHash);
 static CFStringRef APPEMKeyCreateFromHexKey(CFStringRef hexKey);
@@ -379,7 +379,7 @@ CFDictionaryRef APCreateDictionaryForLicenseData(CFDataRef data)
                                                    &errorString);
 #endif
     
-    if (errorString || CFDictionaryGetTypeID() != CFGetTypeID(propertyList) || !CFPropertyListIsValid(propertyList, kCFPropertyListXMLFormat_v1_0)) {
+    if (errorString || !CFPropertyListIsValid(propertyList, kCFPropertyListXMLFormat_v1_0) || CFDictionaryGetTypeID() != CFGetTypeID(propertyList)) {
         if (propertyList)
             CFRelease(propertyList);
         return NULL;
