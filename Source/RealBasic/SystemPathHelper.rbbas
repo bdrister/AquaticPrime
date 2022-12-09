@@ -1,0 +1,1 @@
+#tag ModuleProtected Module SystemPathHelper	#tag Method, Flags = &h0		Function SystemPath(extends f as FolderItem) As String		  #if RBVersion < 2013		    return f.SystemPath		  #else		    return f.NativePath		  #endif		End Function	#tag EndMethodEnd Module#tag EndModule
